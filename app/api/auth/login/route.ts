@@ -1,0 +1,37 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { verifyPassword, createSessionToken, setSecureCookie } from "@/lib/auth";
+
+export async function POST(request: Request) {
+  try {
+    const { email, password } = await request.json();
+
+    if (!email || !password) {
+      return NextResponse.json({ error: "Email dan password wajib diisi!" }, { status: 400 });
+    }
+
+    // Cari pengguna berdasarkan email
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return NextResponse.json({ error: "Email atau password salah!" }, { status: 401 });
+    }
+
+    // Verifikasi password dengan hash Argon2id di database
+    const isPasswordValid = await verifyPassword(password, user.passwordHash);
+    if (!isPasswordValid) {
+      return NextResponse.json({ error: "Email atau password salah!" }, { status: 401 });
+    }
+
+    // Buat token sesi & simpan ke httpOnly cookie
+    const token = createSessionToken({ userId: user.id, email: user.email, role: user.role });
+    await setSecureCookie(token);
+
+    return NextResponse.json({
+      message: "Login berhasil!",
+      role: user.role,
+    });
+  } catch (error) {
+    console.error("Login Error:", error);
+    return NextResponse.json({ error: "Terjadi kesalahan pada server." }, { status: 500 });
+  }
+}
