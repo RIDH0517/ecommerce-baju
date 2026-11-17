@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AuthProvider } from "@/app/(store)/context/AuthContext";
 import { CartProvider } from "@/app/(store)/context/CartContext";
 import CartDrawer from "@/app/(store)/components/CartDrawer";
 
@@ -16,10 +17,12 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className="antialiased">
-        <CartProvider>
-          <CartDrawer />
-          {children}
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <CartDrawer />
+            {children}
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

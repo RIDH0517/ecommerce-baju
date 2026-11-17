@@ -3,9 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/app/(store)/context/AuthContext";
+
+function getSafeNextPath(raw: string | null): string | null {
+  if (!raw) return null;
+  if (!raw.startsWith("/") || raw.startsWith("//") || raw.startsWith("/\\")) return null;
+  if (raw.startsWith("/login") || raw.startsWith("/register")) return null;
+  return raw;
+}
 
 export default function LoginPage() {
   const router = useRouter();
+  const { setUser, refresh } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -27,13 +36,28 @@ export default function LoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Gagal masuk");
 
-      if (data.role === "ADMIN") {
-        router.push("/admin");
-      } else {
-        router.push("/");
+      if (data.user) {
+        setUser(data.user);
       }
-    } catch (err: any) {
-      setError(err.message);
+      await refresh();
+
+      const rawNext =
+        typeof window !== "undefined"
+          ? new URLSearchParams(window.location.search).get("next")
+          : null;
+      const safeNext = getSafeNextPath(rawNext);
+
+      let target: string;
+      if (safeNext) {
+        target = safeNext.startsWith("/admin") && data.role !== "ADMIN" ? "/catalog" : safeNext;
+      } else {
+        target = data.role === "ADMIN" ? "/admin" : "/catalog";
+      }
+
+      router.push(target);
+      router.refresh();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Gagal masuk");
     } finally {
       setLoading(false);
     }

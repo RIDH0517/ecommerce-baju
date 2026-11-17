@@ -147,7 +147,10 @@ export default function ProductDetailPage() {
   };
 
   const handleDirectPurchaseSimulation = () => {
-    if (!isLoggedIn) { router.push("/login"); return; }
+    if (!isLoggedIn) {
+      router.push(`/login?next=${encodeURIComponent(`/product/${product.id}`)}`);
+      return;
+    }
     markAsPurchased([product.id]);
   };
 
@@ -402,7 +405,7 @@ export default function ProductDetailPage() {
                       Silakan masuk ke akun urban.kamen Anda terlebih dahulu.
                     </p>
                     <Link
-                      href="/login"
+                      href={`/login?next=${encodeURIComponent(`/product/${product.id}#reviews`)}`}
                       className="inline-block bg-neutral-950 text-white px-5 py-2.5 text-[11px] font-bold uppercase tracking-widest hover:bg-emerald-700 transition-colors"
                     >
                       Login untuk Mengulas

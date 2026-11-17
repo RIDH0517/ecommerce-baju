@@ -1,16 +1,6 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifySessionToken } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase";
-
-async function requireAdmin() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("session_token")?.value;
-  if (!token) return null;
-  const payload = verifySessionToken(token);
-  if (!payload || payload.role !== "ADMIN") return null;
-  return payload;
-}
 
 export async function POST(req: Request) {
   const admin = await requireAdmin();

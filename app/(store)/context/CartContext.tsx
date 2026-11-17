@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/(store)/context/AuthContext";
 
 export interface ReviewItem {
   id: string;
@@ -222,13 +223,14 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  const { user, isLoggedIn, status, refresh, logout } = useAuth();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userEmail, setUserEmail] = useState("Pelanggan Terverifikasi");
   const [purchasedIds, setPurchasedIds] = useState<string[]>([]);
   const [reviews, setReviews] = useState<Record<string, ReviewItem[]>>(INITIAL_REVIEWS);
   const [isHydrated, setIsHydrated] = useState(false);
+
+  const userEmail = user?.name || user?.email || "Pelanggan Terverifikasi";
 
   const [toastProduct, setToastProduct] = useState<{
     name: string;
@@ -240,15 +242,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     try {
       const savedCart = localStorage.getItem("urbankamen_cart");
       if (savedCart) setCart(JSON.parse(savedCart));
-
-      const savedAuth = localStorage.getItem("urbankamen_logged_in");
-      const hasCookie = document.cookie.includes("session_token=");
-      if (savedAuth === "true" || hasCookie) {
-        setIsLoggedIn(true);
-      }
-
-      const savedEmail = localStorage.getItem("urbankamen_user_email");
-      if (savedEmail) setUserEmail(savedEmail);
 
       const savedPurchases = localStorage.getItem("urbankamen_purchased");
       if (savedPurchases) setPurchasedIds(JSON.parse(savedPurchases));
@@ -269,28 +262,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => setCart([]);
 
-  const setLoggedInState = (status: boolean, email?: string) => {
-    setIsLoggedIn(status);
-    if (status) {
-      localStorage.setItem("urbankamen_logged_in", "true");
-      if (email) {
-        localStorage.setItem("urbankamen_user_email", email);
-        setUserEmail(email);
-      }
+  const setLoggedInState = (nextStatus: boolean) => {
+    if (nextStatus) {
+      void refresh();
     } else {
-      localStorage.removeItem("urbankamen_logged_in");
-      localStorage.removeItem("urbankamen_user_email");
+      void logout();
     }
   };
 
   const addToCart = (product: Omit<CartItem, "quantity">, qty = 1) => {
-    const loggedInNow =
-      isLoggedIn ||
-      localStorage.getItem("urbankamen_logged_in") === "true" ||
-      document.cookie.includes("session_token=");
-
-    if (!loggedInNow) {
-      router.push("/login");
+    if (!isLoggedIn && status !== "loading") {
+      const nextPath =
+        typeof window !== "undefined"
+          ? `${window.location.pathname}${window.location.search}`
+          : "/catalog";
+      router.push(`/login?next=${encodeURIComponent(nextPath)}`);
+      return;
+    }
+    if (status === "loading") {
       return;
     }
 

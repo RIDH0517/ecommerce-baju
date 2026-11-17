@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import ProductForm from "../../_components/ProductForm";
 
 interface ProductSize {
@@ -42,100 +41,88 @@ export default function EditProductPage() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`/api/admin/products/${id}`)
+    let active = true;
+    fetch(`/api/admin/products/${encodeURIComponent(id)}`, { cache: "no-store" })
       .then((res) => {
-        if (!res.ok) { setNotFound(true); return null; }
+        if (!res.ok) {
+          if (active) setNotFound(true);
+          return null;
+        }
         return res.json();
       })
       .then((data) => {
-        if (data) setProduct(data);
+        if (active && data) setProduct(data);
       })
-      .catch(() => setNotFound(true))
-      .finally(() => setIsLoading(false));
+      .catch(() => {
+        if (active) setNotFound(true);
+      })
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-stone-50 text-stone-900 font-[Inter,system-ui,sans-serif]">
-      {/* ── HEADER ── */}
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-stone-200/60">
-        <div className="mx-auto flex max-w-[1360px] items-center justify-between px-5 sm:px-8 h-14">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/admin"
-              className="text-[15px] font-black tracking-[-0.04em] text-stone-900"
-              style={{ fontFamily: "Montserrat, sans-serif" }}
-            >
-              urban<span className="text-emerald-600">.</span>kamen
-            </Link>
-            <span className="hidden sm:inline-block h-4 w-px bg-stone-200" />
-            <span className="hidden sm:inline-block text-[10px] font-medium tracking-[0.2em] uppercase text-stone-400">
-              Edit Produk
-            </span>
-          </div>
+    <div className="mx-auto max-w-3xl space-y-6">
+      <Link
+        href="/admin/products"
+        className="inline-block font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-neutral-500 hover:text-neutral-950"
+      >
+        ← Kembali ke Daftar Produk
+      </Link>
+
+      {isLoading ? (
+        <div className="space-y-4">
+          <div className="h-16 bg-neutral-200 animate-pulse" />
+          <div className="h-72 bg-white border border-neutral-200 animate-pulse" />
+        </div>
+      ) : notFound || !product ? (
+        <div className="border border-neutral-200 bg-white p-12 text-center space-y-4">
+          <p className="text-xs font-bold uppercase tracking-[0.15em] text-neutral-600">
+            Produk tidak ditemukan
+          </p>
           <Link
             href="/admin/products"
-            className="hidden sm:flex items-center gap-1.5 rounded-full bg-stone-100 px-3.5 py-1.5 text-[11px] font-semibold text-stone-600 hover:bg-stone-200 transition-colors"
+            className="inline-block bg-neutral-950 px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.15em] text-white"
           >
-            ← Daftar Produk
+            ← Kembali ke Daftar Produk
           </Link>
         </div>
-      </header>
-
-      <main className="mx-auto max-w-3xl px-5 sm:px-8 py-8">
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-24 gap-3">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
-              className="h-5 w-5 rounded-full border-2 border-stone-300 border-t-stone-900"
-            />
-            <p className="text-xs text-stone-400 tracking-widest uppercase">Memuat produk…</p>
+      ) : (
+        <>
+          <div className="border-b border-neutral-200 pb-5">
+            <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">
+              [02 / EDIT ARTICLE — #{product.id.slice(-6).toUpperCase()}]
+            </span>
+            <h1 className="mt-2 text-2xl sm:text-3xl font-black uppercase tracking-tight text-neutral-950 font-[Montserrat,sans-serif]">
+              Edit Produk
+            </h1>
+            <p className="mt-1 text-xs text-neutral-500 truncate">{product.name}</p>
           </div>
-        ) : notFound || !product ? (
-          <div className="flex flex-col items-center justify-center py-24 gap-4">
-            <p className="text-sm font-semibold text-stone-500">Produk tidak ditemukan</p>
-            <Link
-              href="/admin/products"
-              className="rounded-full bg-stone-900 px-4 py-2 text-[11px] font-semibold text-white"
-            >
-              ← Kembali
-            </Link>
-          </div>
-        ) : (
-          <>
-            <div className="mb-6">
-              <h1
-                className="text-2xl font-black tracking-[-0.03em]"
-                style={{ fontFamily: "Montserrat, sans-serif" }}
-              >
-                Edit Produk
-              </h1>
-              <p className="text-xs text-stone-400 mt-1 truncate max-w-sm">
-                {product.name}
-              </p>
-            </div>
 
-            <ProductForm
-              mode="edit"
-              initialData={{
-                id: product.id,
-                name: product.name,
-                category: product.category || "",
-                collection: product.collection || "",
-                description: product.description || "",
-                specs: product.specs || [],
-                price: String(product.price),
-                oldPrice: product.oldPrice ? String(product.oldPrice) : "",
-                discount: product.discount || "",
-                isNewDrop: product.isNewDrop,
-                imageUrl: product.imageUrl,
-                images: product.images || [],
-                sizes: product.sizes || [],
-              }}
-            />
-          </>
-        )}
-      </main>
+          <ProductForm
+            mode="edit"
+            initialData={{
+              id: product.id,
+              name: product.name,
+              category: product.category || "",
+              collection: product.collection || "",
+              description: product.description || "",
+              specs: product.specs || [],
+              price: String(product.price),
+              oldPrice: product.oldPrice ? String(product.oldPrice) : "",
+              discount: product.discount || "",
+              isNewDrop: product.isNewDrop,
+              imageUrl: product.imageUrl,
+              images: product.images || [],
+              sizes: product.sizes || [],
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }

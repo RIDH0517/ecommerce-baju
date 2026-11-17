@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/app/(store)/components/Navbar";
 import PageTransition from "@/app/(store)/components/PageTransition";
+import { useAuth } from "@/app/(store)/context/AuthContext";
 import { useCart } from "@/app/(store)/context/CartContext";
 import { PROVINCES, FREE_SHIPPING_THRESHOLD } from "@/lib/shipping/config";
 import type { ShippingRate } from "@/lib/shipping/types";
@@ -44,17 +45,6 @@ interface AddressForm {
 
 type FormErrors = Partial<Record<keyof AddressForm | "shipping" | "payment", string>>;
 
-const EMPTY_FORM: AddressForm = {
-  recipientName: "",
-  phone: "",
-  province: "",
-  city: "",
-  district: "",
-  postalCode: "",
-  address: "",
-  notes: "",
-};
-
 const formatIDR = (n: number) =>
   new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n);
 
@@ -89,9 +79,21 @@ const labelClass = "block text-[11px] font-bold uppercase tracking-[0.15em] text
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const { cart, isHydrated, setIsCartOpen } = useCart();
 
-  const [form, setForm] = useState<AddressForm>(EMPTY_FORM);
+  // Auto-fill nama, no. HP, dan alamat dari profil selama field belum diubah manual.
+  const [overrides, setOverrides] = useState<Partial<AddressForm>>({});
+  const form: AddressForm = {
+    recipientName: overrides.recipientName ?? user?.name ?? "",
+    phone: overrides.phone ?? user?.phone ?? "",
+    province: overrides.province ?? "",
+    city: overrides.city ?? "",
+    district: overrides.district ?? "",
+    postalCode: overrides.postalCode ?? "",
+    address: overrides.address ?? user?.address ?? "",
+    notes: overrides.notes ?? "",
+  };
   const [errors, setErrors] = useState<FormErrors>({});
   const [shippingKey, setShippingKey] = useState("");
   const [paymentId, setPaymentId] = useState<PaymentMethodId | "">("");
@@ -130,7 +132,7 @@ export default function CheckoutPage() {
     })
       .then(async (res) => {
         if (res.status === 401) {
-          router.push("/login");
+          router.push("/login?next=/checkout");
           return;
         }
         const data = await res.json();
@@ -158,7 +160,7 @@ export default function CheckoutPage() {
   const remainingForFree = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
 
   const updateField = <K extends keyof AddressForm>(key: K, value: AddressForm[K]) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
+    setOverrides((prev) => ({ ...prev, [key]: value }));
     if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
@@ -187,7 +189,7 @@ export default function CheckoutPage() {
         }),
       });
       if (res.status === 401) {
-        router.push("/login");
+        router.push("/login?next=/checkout");
         return;
       }
       const data = await res.json();

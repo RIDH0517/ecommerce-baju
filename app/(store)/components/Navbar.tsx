@@ -1,24 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useAuth } from "@/app/(store)/context/AuthContext";
 import { useCart } from "@/app/(store)/context/CartContext";
+import ProfileMenu from "@/app/(store)/components/ProfileMenu";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const router = useRouter();
-  const { setIsCartOpen, totalItems, isLoggedIn, setLoggedInState } = useCart();
-
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-    } catch (e) {
-      console.error(e);
-    }
-    setLoggedInState(false);
-    router.push("/login");
-    router.refresh();
-  };
+  const { status, isLoggedIn } = useAuth();
+  const { setIsCartOpen, totalItems } = useCart();
 
   const navLinks = [
     { name: "Catalog", href: "/catalog" },
@@ -26,6 +17,11 @@ export default function Navbar() {
     { name: "Collections", href: "/collections" },
     { name: "About", href: "/about" },
   ];
+
+  const loginHref =
+    pathname && pathname !== "/login" && pathname !== "/register"
+      ? `/login?next=${encodeURIComponent(pathname)}`
+      : "/login";
 
   return (
     <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/95 backdrop-blur-md font-[Inter,sans-serif]">
@@ -58,19 +54,18 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Right Actions: Login/Logout & Cart */}
+        {/* Right Actions: Profile/Login & Cart */}
         <div className="flex items-center space-x-3">
-          {isLoggedIn ? (
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="border border-neutral-200 bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.15em] text-neutral-700 hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-200 cursor-pointer"
-            >
-              Log Out
-            </button>
+          {status === "loading" ? (
+            <div
+              aria-hidden="true"
+              className="h-9 w-24 border border-neutral-200 bg-neutral-100 animate-pulse"
+            />
+          ) : isLoggedIn ? (
+            <ProfileMenu />
           ) : (
             <Link
-              href="/login"
+              href={loginHref}
               className="border border-neutral-200 bg-white px-4 py-2 text-[11px] font-bold uppercase tracking-[0.15em] text-neutral-900 hover:bg-neutral-950 hover:text-white hover:border-neutral-950 transition-all duration-200"
             >
               Login

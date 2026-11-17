@@ -6,12 +6,13 @@ export async function POST(request: Request) {
   try {
     const { email, password } = await request.json();
 
-    if (!email || !password) {
+    const normalizedEmail = typeof email === "string" ? email.trim() : "";
+    if (!normalizedEmail || typeof password !== "string" || !password) {
       return NextResponse.json({ error: "Email dan password wajib diisi!" }, { status: 400 });
     }
 
     // Cari pengguna berdasarkan email
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
     if (!user) {
       return NextResponse.json({ error: "Email atau password salah!" }, { status: 401 });
     }
@@ -29,6 +30,15 @@ export async function POST(request: Request) {
     return NextResponse.json({
       message: "Login berhasil!",
       role: user.role,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        role: user.role,
+        createdAt: user.createdAt,
+      },
     });
   } catch (error) {
     console.error("Login Error:", error);

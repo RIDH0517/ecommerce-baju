@@ -1,16 +1,6 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { verifySessionToken } from "@/lib/auth";
+import { requireAdmin } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-
-async function requireAdmin() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("session_token")?.value;
-  if (!token) return null;
-  const payload = verifySessionToken(token);
-  if (!payload || payload.role !== "ADMIN") return null;
-  return payload;
-}
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -78,47 +68,48 @@ export async function PUT(req: Request, { params }: RouteParams) {
       ? sizes.reduce((sum: number, s: { stock: number }) => sum + (Number(s.stock) || 0), 0)
       : 0;
 
-    // Hapus images & sizes lama lalu buat ulang (simplest strategy untuk update)
-    await prisma.productImage.deleteMany({ where: { productId: id } });
-    await prisma.productSize.deleteMany({ where: { productId: id } });
+    const product = await prisma.$transaction(async (tx) => {
+      await tx.productImage.deleteMany({ where: { productId: id } });
+      await tx.productSize.deleteMany({ where: { productId: id } });
 
-    const product = await prisma.product.update({
-      where: { id },
-      data: {
-        name: name.trim(),
-        description: description?.trim() || null,
-        price: Number(price),
-        oldPrice: oldPrice ? Number(oldPrice) : null,
-        discount: discount?.trim() || null,
-        category: category?.trim() || null,
-        collection: collection?.trim() || null,
-        specs: Array.isArray(specs) ? specs.filter((s: string) => s.trim()) : [],
-        imageUrl,
-        isNewDrop: Boolean(isNewDrop),
-        stock: totalStock,
-        images: {
-          create: Array.isArray(images)
-            ? images.map((img: { url: string; order: number }) => ({
-                url: img.url,
-                order: Number(img.order) || 0,
-              }))
-            : [],
-        },
-        sizes: {
-          create: Array.isArray(sizes)
-            ? sizes
-                .filter((s: { size: string; stock: number }) => s.size)
-                .map((s: { size: string; stock: number }) => ({
-                  size: s.size.trim().toUpperCase(),
-                  stock: Math.max(0, Number(s.stock) || 0),
+      return tx.product.update({
+        where: { id },
+        data: {
+          name: name.trim(),
+          description: description?.trim() || null,
+          price: Number(price),
+          oldPrice: oldPrice ? Number(oldPrice) : null,
+          discount: discount?.trim() || null,
+          category: category?.trim() || null,
+          collection: collection?.trim() || null,
+          specs: Array.isArray(specs) ? specs.filter((s: string) => s.trim()) : [],
+          imageUrl,
+          isNewDrop: Boolean(isNewDrop),
+          stock: totalStock,
+          images: {
+            create: Array.isArray(images)
+              ? images.map((img: { url: string; order: number }) => ({
+                  url: img.url,
+                  order: Number(img.order) || 0,
                 }))
-            : [],
+              : [],
+          },
+          sizes: {
+            create: Array.isArray(sizes)
+              ? sizes
+                  .filter((s: { size: string; stock: number }) => s.size)
+                  .map((s: { size: string; stock: number }) => ({
+                    size: s.size.trim().toUpperCase(),
+                    stock: Math.max(0, Number(s.stock) || 0),
+                  }))
+              : [],
+          },
         },
-      },
-      include: {
-        images: { orderBy: { order: "asc" } },
-        sizes: { orderBy: { size: "asc" } },
-      },
+        include: {
+          images: { orderBy: { order: "asc" } },
+          sizes: { orderBy: { size: "asc" } },
+        },
+      });
     });
 
     return NextResponse.json(product);
