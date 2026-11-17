@@ -214,6 +214,8 @@ interface CartContextType {
   markAsPurchased: (productIds: string[]) => void;
   reviews: Record<string, ReviewItem[]>;
   addReview: (productId: string, rating: number, sizePurchased: string, comment: string) => void;
+  isHydrated: boolean;
+  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -226,6 +228,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [userEmail, setUserEmail] = useState("Pelanggan Terverifikasi");
   const [purchasedIds, setPurchasedIds] = useState<string[]>([]);
   const [reviews, setReviews] = useState<Record<string, ReviewItem[]>>(INITIAL_REVIEWS);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   const [toastProduct, setToastProduct] = useState<{
     name: string;
@@ -255,11 +258,16 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } catch (e) {
       console.error(e);
     }
+    setIsHydrated(true);
   }, []);
 
   useEffect(() => {
+    // Jangan menimpa keranjang tersimpan dengan [] sebelum data selesai dimuat.
+    if (!isHydrated) return;
     localStorage.setItem("urbankamen_cart", JSON.stringify(cart));
-  }, [cart]);
+  }, [cart, isHydrated]);
+
+  const clearCart = () => setCart([]);
 
   const setLoggedInState = (status: boolean, email?: string) => {
     setIsLoggedIn(status);
@@ -384,6 +392,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         markAsPurchased,
         reviews,
         addReview,
+        isHydrated,
+        clearCart,
       }}
     >
       {children}
