@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// Public endpoint: siapa saja bisa GET banner aktif
+// Public endpoint: ambil semua banner aktif urut terbaru untuk carousel storefront
 export async function GET() {
-  const banner = await prisma.banner.findFirst({
-    where: { isActive: true },
-    orderBy: { createdAt: "desc" },
-  });
-
-  return NextResponse.json(banner);
+  try {
+    const banners = await prisma.banner.findMany({
+      where: { isActive: true },
+      orderBy: { createdAt: "desc" },
+    });
+    return NextResponse.json(banners);
+  } catch (error) {
+    console.error("[GET /api/banners]", error);
+    return NextResponse.json([], { status: 500 });
+  }
 }
-

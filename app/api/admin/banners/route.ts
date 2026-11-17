@@ -31,17 +31,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "imageUrl wajib diisi" }, { status: 400 });
     }
 
-    const banner = await prisma.$transaction(async (tx) => {
-      await tx.banner.updateMany({ data: { isActive: false } });
-      return tx.banner.create({
-        data: {
-          imageUrl,
-          isActive: true,
-          title: typeof title === "string" ? title.trim() || null : null,
-          description: typeof description === "string" ? description.trim() || null : null,
-          tag: typeof tag === "string" ? tag.trim() || null : null,
-        },
-      });
+    const banner = await prisma.banner.create({
+      data: {
+        imageUrl,
+        isActive: true,
+        title: typeof title === "string" ? title.trim() || null : null,
+        description: typeof description === "string" ? description.trim() || null : null,
+        tag: typeof tag === "string" ? tag.trim() || null : null,
+      },
     });
 
     return NextResponse.json(banner, { status: 201 });
@@ -64,16 +61,16 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: "ID banner diperlukan" }, { status: 400 });
     }
 
-    const banner = await prisma.$transaction(async (tx) => {
-      const target = await tx.banner.findUnique({ where: { id } });
-      if (!target) return null;
-      await tx.banner.updateMany({ data: { isActive: false } });
-      return tx.banner.update({ where: { id }, data: { isActive: true } });
-    });
-
-    if (!banner) {
+    const target = await prisma.banner.findUnique({ where: { id } });
+    if (!target) {
       return NextResponse.json({ error: "Banner tidak ditemukan" }, { status: 404 });
     }
+
+    const nextActive = typeof body?.isActive === "boolean" ? body.isActive : !target.isActive;
+    const banner = await prisma.banner.update({
+      where: { id },
+      data: { isActive: nextActive },
+    });
 
     return NextResponse.json(banner);
   } catch (error) {

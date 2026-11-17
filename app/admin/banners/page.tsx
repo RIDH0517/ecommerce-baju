@@ -109,23 +109,28 @@ export default function AdminBannersPage() {
     }
   };
 
-  const handleActivate = async (id: string) => {
+  const handleToggleActive = async (id: string, nextActive: boolean) => {
     setBusyId(id);
     setNotice(null);
     try {
       const res = await fetch("/api/admin/banners", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ id, isActive: nextActive }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal mengaktifkan banner.");
+      if (!res.ok) throw new Error(data.error || "Gagal mengubah status banner.");
       await refreshBanners();
-      setNotice({ type: "ok", text: "Banner aktif beranda berhasil diganti." });
+      setNotice({
+        type: "ok",
+        text: nextActive
+          ? "Banner ditambahkan ke slide aktif storefront."
+          : "Banner disembunyikan dari slide storefront.",
+      });
     } catch (err) {
       setNotice({
         type: "err",
-        text: err instanceof Error ? err.message : "Gagal mengaktifkan banner.",
+        text: err instanceof Error ? err.message : "Gagal mengubah status banner.",
       });
     } finally {
       setBusyId(null);
@@ -153,20 +158,20 @@ export default function AdminBannersPage() {
     }
   };
 
-  const activeBanner = banners.find((b) => b.isActive) ?? null;
+  const activeBanners = banners.filter((b) => b.isActive);
 
   return (
     <div className="space-y-8">
       {/* ── HEADER ── */}
       <div className="border-b border-neutral-200 pb-6">
         <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">
-          [04 / STOREFRONT HERO]
+          [04 / STOREFRONT HERO CAROUSEL]
         </span>
         <h1 className="mt-2 text-2xl sm:text-3xl font-black uppercase tracking-tight text-neutral-950 font-[Montserrat,sans-serif]">
           Manajemen Banner
         </h1>
         <p className="mt-1 text-xs text-neutral-500">
-          Kelola banner hero beranda toko. Mengupload banner baru atau mengaktifkan arsip langsung memperbarui halaman katalog.
+          Kelola slide banner hero beranda toko. Anda dapat mengaktifkan beberapa banner sekaligus agar tampil bergulir otomatis di halaman katalog.
         </p>
       </div>
 
@@ -187,52 +192,57 @@ export default function AdminBannersPage() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* LEFT (7 cols): Active Banner + History */}
+        {/* LEFT (7 cols): Active Carousel Slides + History */}
         <div className="lg:col-span-7 space-y-6">
-          {/* Active Banner */}
+          {/* Active Carousel Slides */}
           <section className="border border-neutral-950 bg-white p-5 space-y-4">
             <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
               <span className="font-mono text-xs font-bold uppercase tracking-[0.15em] text-neutral-950">
-                01 / Banner Aktif di Storefront
+                01 / Slide Aktif di Carousel ({activeBanners.length})
               </span>
-              {activeBanner && (
+              {activeBanners.length > 0 && (
                 <span className="bg-emerald-700 px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-white">
-                  LIVE
+                  {activeBanners.length} LIVE
                 </span>
               )}
             </div>
 
             {loading ? (
               <div className="aspect-[16/7] bg-neutral-100 animate-pulse" />
-            ) : activeBanner ? (
-              <div className="space-y-3">
-                <div className="relative aspect-[16/7] w-full overflow-hidden border border-neutral-200 bg-neutral-950">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={activeBanner.imageUrl}
-                    alt={activeBanner.title || "Banner aktif"}
-                    className="h-full w-full object-cover opacity-85"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent p-5 flex flex-col justify-end text-white">
-                    {activeBanner.tag && (
-                      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-400">
-                        [{activeBanner.tag}]
+            ) : activeBanners.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {activeBanners.map((b, idx) => (
+                  <div
+                    key={b.id}
+                    className="relative aspect-[16/9] w-full overflow-hidden border border-neutral-200 bg-neutral-950"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={b.imageUrl}
+                      alt={b.title || "Banner aktif"}
+                      className="h-full w-full object-cover opacity-85"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-3.5 flex flex-col justify-between text-white">
+                      <span className="self-start bg-neutral-950/85 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase">
+                        SLIDE {String(idx + 1).padStart(2, "0")}
                       </span>
-                    )}
-                    <h2 className="mt-1 text-lg font-black uppercase tracking-tight font-[Montserrat,sans-serif]">
-                      {activeBanner.title || "Banner Tanpa Judul"}
-                    </h2>
-                    {activeBanner.description && (
-                      <p className="mt-1 text-xs text-neutral-200 line-clamp-2">
-                        {activeBanner.description}
-                      </p>
-                    )}
+                      <div>
+                        {b.tag && (
+                          <span className="font-mono text-[9px] font-bold uppercase tracking-[0.15em] text-emerald-400">
+                            [{b.tag}]
+                          </span>
+                        )}
+                        <p className="mt-0.5 text-xs font-black uppercase tracking-tight line-clamp-1 font-[Montserrat,sans-serif]">
+                          {b.title || "Banner Tanpa Judul"}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             ) : (
               <div className="border border-dashed border-neutral-300 py-12 text-center text-xs text-neutral-500">
-                Belum ada banner aktif. Unggah banner di sebelah kanan untuk menayangkannya di beranda.
+                Belum ada banner aktif. Unggah banner di sebelah kanan atau aktifkan dari daftar riwayat di bawah.
               </div>
             )}
           </section>
@@ -241,7 +251,7 @@ export default function AdminBannersPage() {
           <section className="border border-neutral-200 bg-white p-5 space-y-4">
             <div className="flex items-center justify-between border-b border-neutral-200 pb-3">
               <span className="font-mono text-xs font-bold uppercase tracking-[0.15em] text-neutral-950">
-                02 / Riwayat Banner ({banners.length})
+                02 / Semua Banner ({banners.length})
               </span>
             </div>
 
@@ -259,9 +269,13 @@ export default function AdminBannersPage() {
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        {b.isActive && (
-                          <span className="bg-neutral-950 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase text-white">
-                            AKTIF
+                        {b.isActive ? (
+                          <span className="bg-emerald-700 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase text-white">
+                            AKTIF DI SLIDE
+                          </span>
+                        ) : (
+                          <span className="border border-neutral-300 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase text-neutral-400">
+                            ARSIP
                           </span>
                         )}
                         {b.tag && (
@@ -282,16 +296,18 @@ export default function AdminBannersPage() {
                       </p>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      {!b.isActive && (
-                        <button
-                          type="button"
-                          disabled={busyId === b.id}
-                          onClick={() => handleActivate(b.id)}
-                          className="border border-neutral-950 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-neutral-950 hover:bg-neutral-950 hover:text-white transition-colors disabled:opacity-50 cursor-pointer"
-                        >
-                          Aktifkan
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        disabled={busyId === b.id}
+                        onClick={() => handleToggleActive(b.id, !b.isActive)}
+                        className={`border px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-colors disabled:opacity-50 cursor-pointer ${
+                          b.isActive
+                            ? "border-neutral-300 text-neutral-700 hover:border-neutral-950"
+                            : "border-neutral-950 text-neutral-950 hover:bg-neutral-950 hover:text-white"
+                        }`}
+                      >
+                        {b.isActive ? "Sembunyikan" : "Tampilkan"}
+                      </button>
                       <button
                         type="button"
                         disabled={busyId === b.id}

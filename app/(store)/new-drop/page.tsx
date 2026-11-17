@@ -81,30 +81,13 @@ export default function NewDropPage() {
       <PageTransition>
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-12">
           {/* Header */}
-          <div className="border-b border-neutral-200 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-2">
-              <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">
-                [DROP 01 — LIMITED ARCHIVE RELEASE]
-              </span>
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight font-[Montserrat,sans-serif]">
-                AUTUMN / WINTER 2026 DROP
-              </h1>
-              <p className="text-xs sm:text-sm text-neutral-500 max-w-xl">
-                Diproduksi dalam jumlah terbatas per artikel. Setiap potong pakaian diberi nomor seri produksi dan tidak akan diproduksi ulang setelah stok habis.
-              </p>
-            </div>
-
-            <div className="flex items-center space-x-4 border border-neutral-200 bg-neutral-50 px-5 py-3 font-mono flex-shrink-0">
-              <div>
-                <span className="block text-[10px] uppercase text-neutral-400">Release Status</span>
-                <span className="text-xs font-bold text-emerald-700">LIVE — IN STOCK</span>
-              </div>
-              <span className="text-neutral-300">|</span>
-              <div>
-                <span className="block text-[10px] uppercase text-neutral-400">Edition</span>
-                <span className="text-xs font-bold text-neutral-950">AW26-001</span>
-              </div>
-            </div>
+          <div className="border-b border-neutral-200 pb-8">
+            <h1 className="text-3xl sm:text-4xl font-black tracking-tight font-[Montserrat,sans-serif]">
+              New Drop Collection
+            </h1>
+            <p className="mt-2 text-xs sm:text-sm text-neutral-500 max-w-xl leading-relaxed">
+              Koleksi produk terbaru yang baru saja dirilis. Pilih artikel dan ukuran yang Anda inginkan sebelum kehabisan.
+            </p>
           </div>
 
           {/* Grid */}
@@ -119,7 +102,7 @@ export default function NewDropPage() {
                 </Link>
               </div>
             ) : (
-              products.map((product, index) => {
+              products.map((product) => {
                 const mainImage =
                   product.images?.find((img) => img.order === 0)?.url ||
                   product.images?.[0]?.url ||
@@ -138,8 +121,8 @@ export default function NewDropPage() {
                         href={`/product/${product.id}`}
                         className="block relative aspect-[4/5] bg-neutral-100 overflow-hidden"
                       >
-                        <span className="absolute top-3 left-3 z-10 bg-emerald-700 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-white">
-                          DROP {String(index + 1).padStart(2, "0")}
+                        <span className="absolute top-3 left-3 z-10 bg-emerald-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
+                          New
                         </span>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img

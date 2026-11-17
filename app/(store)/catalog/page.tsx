@@ -6,14 +6,17 @@ import Navbar from "@/app/(store)/components/Navbar";
 import PageTransition from "@/app/(store)/components/PageTransition";
 import { useCart } from "@/app/(store)/context/CartContext";
 
-const DEFAULT_BANNER_IMAGE =
-  "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=80&w=1000";
-const DEFAULT_BANNER_TITLE = "STRUCTURAL GARMENTS FOR MODERN LIVING.";
-const DEFAULT_BANNER_DESC =
-  "Konstruksi tekstil berdensitas tinggi dengan potongan presisi. Klik pada setiap artikel di bawah untuk melihat spesifikasi lengkap, memilih ukuran, dan membaca ulasan pembeli terverifikasi.";
-const DEFAULT_BANNER_TAG = "[ARCHIVE — AW26]";
+const DEFAULT_BANNER: BannerData = {
+  imageUrl:
+    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=80&w=1000",
+  title: "New Drop Collection",
+  description:
+    "Koleksi pakaian harian dengan bahan berkualitas dan potongan yang nyaman dipakai setiap hari.",
+  tag: null,
+};
 
 interface BannerData {
+  id?: string;
   imageUrl: string;
   title?: string | null;
   description?: string | null;
@@ -78,44 +81,79 @@ export default function CatalogPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
-  const [isLoadingProducts, setIsLoadingProducts] = useState(true);
-  const [banner, setBanner] = useState<BannerData>({
-    imageUrl: DEFAULT_BANNER_IMAGE,
-    title: DEFAULT_BANNER_TITLE,
-    description: DEFAULT_BANNER_DESC,
-    tag: DEFAULT_BANNER_TAG,
-  });
+  const [loadedKey, setLoadedKey] = useState("");
+  const productKey = `${selectedCategory}|${searchQuery}`;
+  const isLoadingProducts = loadedKey !== productKey;
 
-  // Fetch banner
+  const [banners, setBanners] = useState<BannerData[]>([DEFAULT_BANNER]);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  // Fetch semua banner aktif untuk carousel
   useEffect(() => {
-    fetch("/api/banners")
-      .then((res) => res.ok ? res.json() : null)
+    let active = true;
+    fetch("/api/banners", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
-        if (data?.imageUrl) {
-          setBanner({
-            imageUrl: data.imageUrl,
-            title: data.title || DEFAULT_BANNER_TITLE,
-            description: data.description || DEFAULT_BANNER_DESC,
-            tag: data.tag || DEFAULT_BANNER_TAG,
-          });
+        if (!active) return;
+        const list = Array.isArray(data) ? data : data?.imageUrl ? [data] : [];
+        if (list.length > 0) {
+          setBanners(
+            list.map((b: BannerData) => ({
+              id: b.id,
+              imageUrl: b.imageUrl,
+              title: b.title || DEFAULT_BANNER.title,
+              description: b.description || DEFAULT_BANNER.description,
+              tag: b.tag || null,
+            }))
+          );
+          setActiveSlide(0);
         }
       })
       .catch(() => {});
+    return () => {
+      active = false;
+    };
   }, []);
+
+  // Auto-slide carousel banner otomatis tiap 4 detik (reset timer saat diganti manual)
+  useEffect(() => {
+    if (banners.length <= 1) return;
+    const timer = setTimeout(() => {
+      setActiveSlide((prev) => (prev + 1) % banners.length);
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [activeSlide, banners.length]);
 
   // Fetch produk dari DB
   useEffect(() => {
-    setIsLoadingProducts(true);
+    let active = true;
     const params = new URLSearchParams();
     if (selectedCategory !== "All") params.set("category", selectedCategory);
     if (searchQuery) params.set("search", searchQuery);
 
     fetch(`/api/products?${params.toString()}`)
-      .then((res) => res.ok ? res.json() : [])
-      .then((data: Product[]) => setProducts(data))
-      .catch(() => setProducts([]))
-      .finally(() => setIsLoadingProducts(false));
-  }, [selectedCategory, searchQuery]);
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: Product[]) => {
+        if (active) setProducts(data);
+      })
+      .catch(() => {
+        if (active) setProducts([]);
+      })
+      .finally(() => {
+        if (active) setLoadedKey(productKey);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [selectedCategory, searchQuery, productKey]);
+
+  const safeIndex = banners.length > 0 ? activeSlide % banners.length : 0;
+
+  const goPrevSlide = () =>
+    setActiveSlide((prev) => (prev - 1 + banners.length) % banners.length);
+  const goNextSlide = () =>
+    setActiveSlide((prev) => (prev + 1) % banners.length);
 
   return (
     <div className="min-h-screen bg-white text-neutral-950 font-[Inter,sans-serif]">
@@ -123,49 +161,111 @@ export default function CatalogPage() {
 
       <PageTransition>
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-12">
-          {/* Editorial Hero Header */}
-          <section className="grid grid-cols-1 lg:grid-cols-12 border border-neutral-200 bg-neutral-950 text-white overflow-hidden">
-            <div className="lg:col-span-7 p-8 sm:p-12 lg:p-16 flex flex-col justify-between space-y-8">
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-emerald-400">
-                    {banner.tag}
-                  </span>
-                  <span className="h-[1px] w-8 bg-neutral-700" />
-                  <span className="font-mono text-[11px] text-neutral-400">
-                    SEMARANG / TOKYO
-                  </span>
+          {/* Editorial Hero Carousel — Ukuran Tetap (Fixed) & Gambar Lebih Lebar */}
+          <section className="grid grid-cols-1 lg:grid-cols-12 lg:h-[460px] border border-neutral-200 bg-neutral-950 text-white overflow-hidden">
+            {/* Kolom Kiri: Deskripsi Bergulir + Kontrol Slide (4-5 kolom) */}
+            <div className="lg:col-span-5 xl:col-span-4 lg:h-full p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-6 order-2 lg:order-1 overflow-hidden">
+              <div className="overflow-hidden">
+                <div
+                  className="flex transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  style={{ transform: `translateX(-${safeIndex * 100}%)` }}
+                >
+                  {banners.map((b, idx) => (
+                    <div key={b.id ?? idx} className="w-full flex-shrink-0 space-y-4">
+                      {b.tag && (
+                        <span className="inline-block text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-400">
+                          {b.tag}
+                        </span>
+                      )}
+                      <h1 className="text-2xl sm:text-3xl font-black tracking-tight leading-[1.12] line-clamp-3 font-[Montserrat,sans-serif]">
+                        {b.title}
+                      </h1>
+                      <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed line-clamp-4">
+                        {b.description}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-                <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-[1.08] font-[Montserrat,sans-serif]">
-                  {banner.title}
-                </h1>
-                <p className="text-xs sm:text-sm text-neutral-400 max-w-xl leading-relaxed">
-                  {banner.description}
-                </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <Link
-                  href="/new-drop"
-                  className="bg-white text-neutral-950 hover:bg-emerald-500 hover:text-white px-6 py-3.5 text-xs font-bold uppercase tracking-[0.18em] transition-colors font-[Montserrat,sans-serif]"
-                >
-                  Explore New Drop →
-                </Link>
-                <Link
-                  href="/collections"
-                  className="border border-neutral-700 hover:border-white px-6 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-neutral-300 hover:text-white transition-colors"
-                >
-                  View Lookbook
-                </Link>
+              <div className="space-y-4 pt-2 flex-shrink-0">
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link
+                    href="/new-drop"
+                    className="bg-white text-neutral-950 hover:bg-emerald-500 hover:text-white px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] transition-colors font-[Montserrat,sans-serif]"
+                  >
+                    Explore New Drop →
+                  </Link>
+                  <Link
+                    href="/collections"
+                    className="border border-neutral-700 hover:border-white px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-neutral-300 hover:text-white transition-colors"
+                  >
+                    Lookbook
+                  </Link>
+                </div>
+
+                {banners.length > 1 && (
+                  <div className="flex items-center justify-between gap-4 border-t border-neutral-800 pt-4">
+                    <div className="flex items-center gap-1.5 flex-1">
+                      {banners.map((b, idx) => (
+                        <button
+                          key={b.id ?? idx}
+                          type="button"
+                          onClick={() => setActiveSlide(idx)}
+                          aria-label={`Pilih banner ${idx + 1}`}
+                          className={`h-1 transition-all duration-300 cursor-pointer ${
+                            idx === safeIndex
+                              ? "w-8 bg-emerald-400"
+                              : "w-3 bg-neutral-700 hover:bg-neutral-500"
+                          }`}
+                        />
+                      ))}
+                      <span className="ml-2 font-mono text-[10px] text-neutral-400">
+                        {String(safeIndex + 1).padStart(2, "0")} /{" "}
+                        {String(banners.length).padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={goPrevSlide}
+                        aria-label="Banner sebelumnya"
+                        className="h-8 w-8 border border-neutral-700 flex items-center justify-center font-mono text-xs text-neutral-300 hover:border-white hover:text-white transition-colors cursor-pointer"
+                      >
+                        ←
+                      </button>
+                      <button
+                        type="button"
+                        onClick={goNextSlide}
+                        aria-label="Banner berikutnya"
+                        className="h-8 w-8 border border-neutral-700 flex items-center justify-center font-mono text-xs text-neutral-300 hover:border-white hover:text-white transition-colors cursor-pointer"
+                      >
+                        →
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
-            <div className="lg:col-span-5 relative min-h-[320px] lg:min-h-full bg-neutral-900 border-t lg:border-t-0 lg:border-l border-neutral-800">
-              <img
-                src={banner.imageUrl}
-                alt="urban.kamen Campaign"
-                className="h-full w-full object-cover opacity-90"
-              />
+            {/* Kolom Kanan: Track Gambar Ukuran Tetap Lebih Lebar (7-8 kolom) */}
+            <div className="lg:col-span-7 xl:col-span-8 relative h-[280px] sm:h-[360px] lg:h-full bg-neutral-900 border-b lg:border-b-0 lg:border-l border-neutral-800 overflow-hidden order-1 lg:order-2">
+              <div
+                className="absolute inset-0 flex transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                style={{ transform: `translateX(-${safeIndex * 100}%)` }}
+              >
+                {banners.map((b, idx) => (
+                  <div key={b.id ?? idx} className="relative h-full w-full flex-shrink-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={b.imageUrl}
+                      alt={b.title || `urban.kamen Campaign ${idx + 1}`}
+                      className="absolute inset-0 h-full w-full object-cover object-center opacity-90"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
 

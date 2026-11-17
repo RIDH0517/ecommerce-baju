@@ -11,54 +11,42 @@ export default function AboutPage() {
 
       <PageTransition>
         <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-14 space-y-16">
-          {/* Header Manifesto */}
-          <section className="space-y-6 border-b border-neutral-200 pb-12">
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold">
-              [MANIFESTO & ATELIER STANDARD]
-            </span>
+          {/* Header */}
+          <section className="space-y-4 border-b border-neutral-200 pb-10">
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-[1.1] font-[Montserrat,sans-serif]">
-              CRAFTED WITHOUT COMPROMISE. BUILT FOR PERMANENCE.
+              Tentang urban.kamen
             </h1>
             <p className="text-sm sm:text-base text-neutral-600 leading-relaxed max-w-3xl">
-              Didirikan dengan visi mendefinisikan ulang pakaian esensial kontemporer, <strong>urban.kamen</strong> menggabungkan siluet arsitektural jalanan dengan standar konstruksi garmen kelas berat (heavyweight). Kami menolak siklus fast-fashion dengan merancang artikel yang semakin berkarakter seiring waktu pemakaian.
+              <strong>urban.kamen</strong> menghadirkan pakaian harian dengan desain sederhana, potongan rapi, dan bahan yang nyaman serta tahan lama untuk dipakai setiap hari.
             </p>
           </section>
 
           {/* 3 Pilar Kualitas */}
           <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="border border-neutral-200 p-6 space-y-3">
-              <span className="font-mono text-xs font-bold text-neutral-400">
-                01 / MATERIAL DENSITY
-              </span>
+            <div className="border border-neutral-200 p-6 space-y-2.5">
               <h2 className="text-sm font-black uppercase tracking-wider font-[Montserrat,sans-serif]">
-                Heavyweight Grade Fabrics
+                Bahan Berkualitas
               </h2>
               <p className="text-xs text-neutral-600 leading-relaxed">
-                Seluruh koleksi kaos dan outerwear kami menggunakan katun murni berdensitas 280 GSM hingga 420 GSM serta denim selvedge 14 oz untuk struktur jatuh kain yang tegas.
+                Seluruh koleksi kaos dan outerwear kami menggunakan katun berdensitas 280 GSM hingga 420 GSM serta denim pilihan yang nyaman dan tidak mudah berubah bentuk.
               </p>
             </div>
 
-            <div className="border border-neutral-200 p-6 space-y-3">
-              <span className="font-mono text-xs font-bold text-neutral-400">
-                02 / SMALL-BATCH PRODUCTION
-              </span>
+            <div className="border border-neutral-200 p-6 space-y-2.5">
               <h2 className="text-sm font-black uppercase tracking-wider font-[Montserrat,sans-serif]">
-                Precision Tailoring
+                Jahitan Rapi &amp; Tahan Lama
               </h2>
               <p className="text-xs text-neutral-600 leading-relaxed">
-                Diproduksi dalam jumlah terbatas untuk memastikan kontrol kualitas jahitan rantai ganda, presisi kerah anti-melar, dan pencucian enzim ramah lingkungan.
+                Diproduksi dalam batch terjaga untuk memastikan kontrol kualitas jahitan, kerah yang tidak mudah melar, dan hasil akhir yang konsisten.
               </p>
             </div>
 
-            <div className="border border-neutral-200 p-6 space-y-3">
-              <span className="font-mono text-xs font-bold text-neutral-400">
-                03 / VERIFIED TRANSPARENCY
-              </span>
+            <div className="border border-neutral-200 p-6 space-y-2.5">
               <h2 className="text-sm font-black uppercase tracking-wider font-[Montserrat,sans-serif]">
-                Direct-to-Archive
+                Ulasan Pelanggan Asli
               </h2>
               <p className="text-xs text-neutral-600 leading-relaxed">
-                Setiap ulasan pada katalog kami terverifikasi langsung dari riwayat transaksi pelanggan resmi untuk menjamin keakuratan penilaian ukuran dan material.
+                Ulasan produk berasal dari pembeli terverifikasi agar membantu Anda memilih ukuran dan model dengan lebih tepat.
               </p>
             </div>
           </section>
@@ -67,10 +55,10 @@ export default function AboutPage() {
           <section className="border border-neutral-950 bg-neutral-950 text-white p-8 sm:p-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="space-y-1.5">
               <h3 className="text-lg font-black uppercase tracking-wider font-[Montserrat,sans-serif]">
-                Explore The AW26 Archive
+                Koleksi Terbaru
               </h3>
               <p className="text-xs text-neutral-400">
-                Temukan siluet esensial terbaru yang tersedia untuk pengiriman langsung hari ini.
+                Temukan pilihan produk terbaru yang siap dipesan hari ini.
               </p>
             </div>
             <Link

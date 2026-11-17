@@ -97,12 +97,12 @@ export default function CollectionsPage() {
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 space-y-12">
           {/* Header */}
           <div className="space-y-4 border-b border-neutral-200 pb-8">
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-neutral-400">
-              [SEASONAL CURATION & LOOKBOOK]
-            </span>
             <h1 className="text-3xl sm:text-4xl font-black tracking-tight font-[Montserrat,sans-serif]">
-              CURATED COLLECTIONS
+              Collections
             </h1>
+            <p className="text-xs sm:text-sm text-neutral-500 max-w-xl">
+              Pilih dan telusuri produk berdasarkan seri koleksi kami.
+            </p>
 
             {/* Filter koleksi — dynamic dari DB */}
             <div className="flex flex-wrap gap-2 pt-2">

@@ -24,10 +24,7 @@ export default function AccountNav({ title }: { title: string }) {
     <div className="border-b border-neutral-200 pb-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <span className="font-mono text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold">
-            [ACCOUNT ARCHIVE]
-          </span>
-          <h1 className="mt-2 text-3xl sm:text-4xl font-black tracking-tight uppercase font-[Montserrat,sans-serif]">
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight font-[Montserrat,sans-serif]">
             {title}
           </h1>
           {user && (

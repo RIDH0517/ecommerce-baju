@@ -243,8 +243,7 @@ export default function CheckoutPage() {
         <Navbar />
         <PageTransition>
           <main className="mx-auto max-w-xl px-4 py-28 text-center">
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold">[CHECKOUT]</span>
-            <h1 className="mt-4 text-2xl font-black tracking-tight font-[Montserrat,sans-serif]">
+            <h1 className="text-2xl font-black tracking-tight font-[Montserrat,sans-serif]">
               KERANJANG ANDA KOSONG
             </h1>
             <p className="mt-3 text-sm text-neutral-500">Tambahkan artikel dari katalog sebelum melanjutkan ke checkout.</p>
@@ -283,11 +282,8 @@ export default function CheckoutPage() {
         <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
           {/* Header */}
           <div className="border-b border-neutral-200 pb-8">
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-emerald-700 font-bold">
-              [SECURE CHECKOUT]
-            </span>
-            <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight font-[Montserrat,sans-serif]">CHECKOUT</h1>
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight font-[Montserrat,sans-serif]">Checkout</h1>
               <button
                 type="button"
                 onClick={() => setIsCartOpen(true)}
