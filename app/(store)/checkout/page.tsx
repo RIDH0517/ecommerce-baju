@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/app/(store)/components/Navbar";
 import PageTransition from "@/app/(store)/components/PageTransition";
+import AddressFormModal from "@/app/(store)/account/_components/AddressFormModal";
 import { useAuth } from "@/app/(store)/context/AuthContext";
 import { useCart } from "@/app/(store)/context/CartContext";
-import { PROVINCES, FREE_SHIPPING_THRESHOLD } from "@/lib/shipping/config";
+import { MAX_ADDRESSES_PER_USER, type UserAddress } from "@/lib/addresses";
+import { FREE_SHIPPING_THRESHOLD } from "@/lib/shipping/config";
 import type { ShippingRate } from "@/lib/shipping/types";
 import { PAYMENT_METHODS, PAYMENT_GATEWAY_ENABLED, type PaymentMethodId } from "@/lib/payment/methods";
 
@@ -32,78 +34,107 @@ interface Quote {
   isValid: boolean;
 }
 
-interface AddressForm {
-  recipientName: string;
-  phone: string;
-  province: string;
-  city: string;
-  district: string;
-  postalCode: string;
-  address: string;
-  notes: string;
+interface FormErrors {
+  address?: string;
+  shipping?: string;
+  payment?: string;
 }
-
-type FormErrors = Partial<Record<keyof AddressForm | "shipping" | "payment", string>>;
 
 const formatIDR = (n: number) =>
   new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n);
 
 const rateKey = (r: Pick<ShippingRate, "courierCode" | "service">) => `${r.courierCode}:${r.service}`;
 
-function validate(form: AddressForm, shippingKey: string, paymentId: PaymentMethodId | ""): FormErrors {
-  const e: FormErrors = {};
-  const name = form.recipientName.trim();
-  if (name.length < 2 || name.length > 60) e.recipientName = "Nama penerima 2–60 karakter.";
-  const phone = form.phone.replace(/[\s-]/g, "");
-  if (!/^(\+62|62|0)8\d{7,11}$/.test(phone)) e.phone = "Nomor HP tidak valid (contoh: 0812xxxxxxxx).";
-  if (!form.province) e.province = "Pilih provinsi.";
-  if (form.city.trim().length < 2) e.city = "Isi kota / kabupaten.";
-  if (form.district.trim().length < 2) e.district = "Isi kecamatan.";
-  if (!/^\d{5}$/.test(form.postalCode.trim())) e.postalCode = "Kode pos 5 digit.";
-  const addr = form.address.trim();
-  if (addr.length < 10 || addr.length > 300) e.address = "Alamat lengkap 10–300 karakter.";
-  if (form.notes.length > 200) e.notes = "Catatan maksimal 200 karakter.";
-  if (!shippingKey) e.shipping = "Pilih jasa pengiriman.";
-  if (!paymentId) e.payment = "Pilih metode pembayaran.";
-  return e;
-}
-
-const inputClass = (hasError?: string) =>
-  `mt-1.5 block w-full border px-3.5 py-3 text-sm text-neutral-950 placeholder-neutral-400 bg-white focus:outline-none focus:ring-1 transition-colors ${
-    hasError
-      ? "border-red-400 focus:border-red-500 focus:ring-red-500"
-      : "border-neutral-200 focus:border-neutral-950 focus:ring-neutral-950"
-  }`;
-
-const labelClass = "block text-[11px] font-bold uppercase tracking-[0.15em] text-neutral-600";
-
 export default function CheckoutPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, status: authStatus } = useAuth();
   const { cart, isHydrated, setIsCartOpen } = useCart();
 
-  // Auto-fill nama, no. HP, dan alamat dari profil selama field belum diubah manual.
-  const [overrides, setOverrides] = useState<Partial<AddressForm>>({});
-  const form: AddressForm = {
-    recipientName: overrides.recipientName ?? user?.name ?? "",
-    phone: overrides.phone ?? user?.phone ?? "",
-    province: overrides.province ?? "",
-    city: overrides.city ?? "",
-    district: overrides.district ?? "",
-    postalCode: overrides.postalCode ?? "",
-    address: overrides.address ?? user?.address ?? "",
-    notes: overrides.notes ?? "",
-  };
+  // Buku alamat pelanggan
+  const [addresses, setAddresses] = useState<UserAddress[]>([]);
+  const [addressesLoading, setAddressesLoading] = useState(true);
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [formModal, setFormModal] = useState<{ open: boolean; editing: UserAddress | null }>({
+    open: false,
+    editing: null,
+  });
+
   const [errors, setErrors] = useState<FormErrors>({});
   const [shippingKey, setShippingKey] = useState("");
   const [paymentId, setPaymentId] = useState<PaymentMethodId | "">("");
 
   const [quote, setQuote] = useState<Quote | null>(null);
-  // Kunci permintaan terakhir yang sudah selesai (sukses/gagal) + pesan error-nya.
   const [resolved, setResolved] = useState<{ key: string; error: string }>({ key: "", error: "" });
   const [submitting, setSubmitting] = useState(false);
   const [submitNotice, setSubmitNotice] = useState("");
   const abortRef = useRef<AbortController | null>(null);
+
+  const fetchAddresses = useCallback(
+    async (preferId?: string) => {
+      const res = await fetch("/api/account/addresses", { cache: "no-store" });
+      if (res.status === 401) {
+        router.push("/login?next=/checkout");
+        return;
+      }
+      if (!res.ok) return;
+      const data = await res.json();
+      const list = (data.addresses ?? []) as UserAddress[];
+      setAddresses(list);
+      setSelectedAddressId((prev) => {
+        if (preferId && list.some((a) => a.id === preferId)) return preferId;
+        if (prev && list.some((a) => a.id === prev)) return prev;
+        return list.find((a) => a.isPrimary)?.id ?? list[0]?.id ?? null;
+      });
+    },
+    [router]
+  );
+
+  // Muat daftar alamat begitu user terautentikasi
+  useEffect(() => {
+    if (authStatus === "guest") {
+      router.push("/login?next=/checkout");
+      return;
+    }
+    if (authStatus !== "authenticated") return;
+
+    let active = true;
+    fetch("/api/account/addresses", { cache: "no-store" })
+      .then(async (res) => {
+        if (res.status === 401) {
+          router.push("/login?next=/checkout");
+          return null;
+        }
+        if (!res.ok) return null;
+        const data = await res.json();
+        return (data.addresses ?? []) as UserAddress[];
+      })
+      .then((list) => {
+        if (!active || !list) return;
+        setAddresses(list);
+        const primary = list.find((a) => a.isPrimary) ?? list[0] ?? null;
+        setSelectedAddressId(primary?.id ?? null);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (active) setAddressesLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [authStatus, router]);
+
+  const selectedAddress = useMemo(
+    () =>
+      addresses.find((a) => a.id === selectedAddressId) ??
+      addresses.find((a) => a.isPrimary) ??
+      addresses[0] ??
+      null,
+    [addresses, selectedAddressId]
+  );
+
+  const selectedProvince = selectedAddress?.province ?? "";
 
   // Payload keranjang yang dikirim ke server (tanpa harga, server yang menentukan harga).
   const cartPayload = useMemo(
@@ -111,12 +142,12 @@ export default function CheckoutPage() {
     [cart]
   );
   const cartSignature = JSON.stringify(cartPayload);
-  const requestKey = `${cartSignature}|${form.province}`;
-  const shouldFetch = isHydrated && cartPayload.length > 0;
+  const requestKey = `${cartSignature}|${selectedProvince}`;
+  const shouldFetch = isHydrated && cartPayload.length > 0 && authStatus === "authenticated";
   const quoteLoading = shouldFetch && resolved.key !== requestKey;
   const quoteError = resolved.key === requestKey ? resolved.error : "";
 
-  // Ambil ringkasan dari server setiap kali isi keranjang atau provinsi berubah.
+  // Ambil ringkasan dari server setiap kali isi keranjang atau provinsi alamat berubah.
   useEffect(() => {
     if (!shouldFetch) return;
 
@@ -127,7 +158,7 @@ export default function CheckoutPage() {
     fetch("/api/checkout/quote", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: cartPayload, province: form.province }),
+      body: JSON.stringify({ items: cartPayload, province: selectedProvince }),
       signal: controller.signal,
     })
       .then(async (res) => {
@@ -138,7 +169,7 @@ export default function CheckoutPage() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Gagal memuat ringkasan.");
         setQuote(data as Quote);
-        // Reset pilihan kurir jika sudah tidak tersedia untuk provinsi baru.
+        // Reset pilihan kurir jika sudah tidak tersedia untuk provinsi alamat baru.
         setShippingKey((prev) =>
           (data as Quote).shippingRates.some((r) => rateKey(r) === prev) ? prev : ""
         );
@@ -159,17 +190,24 @@ export default function CheckoutPage() {
   const total = subtotal + shippingCost;
   const remainingForFree = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
 
-  const updateField = <K extends keyof AddressForm>(key: K, value: AddressForm[K]) => {
-    setOverrides((prev) => ({ ...prev, [key]: value }));
-    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
+  const handleAddressSaved = async (saved: UserAddress) => {
+    setFormModal({ open: false, editing: null });
+    setErrors((prev) => ({ ...prev, address: undefined }));
+    await fetchAddresses(saved.id);
+    setSelectedAddressId(saved.id);
+    setIsPickerOpen(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitNotice("");
 
-    const v = validate(form, shippingKey, paymentId);
+    const v: FormErrors = {};
+    if (!selectedAddress) v.address = "Pilih atau tambahkan alamat pengiriman terlebih dahulu.";
+    if (!shippingKey) v.shipping = "Pilih jasa pengiriman.";
+    if (!paymentId) v.payment = "Pilih metode pembayaran.";
     setErrors(v);
+
     if (Object.keys(v).length > 0) {
       document.getElementById(`field-${Object.keys(v)[0]}`)?.focus();
       return;
@@ -177,13 +215,12 @@ export default function CheckoutPage() {
 
     setSubmitting(true);
     try {
-      // Validasi ulang harga, stok, dan ongkir di server tepat sebelum lanjut.
       const res = await fetch("/api/checkout/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: cartPayload,
-          province: form.province,
+          province: selectedProvince,
           courierCode: selectedRate?.courierCode,
           service: selectedRate?.service,
         }),
@@ -206,13 +243,13 @@ export default function CheckoutPage() {
 
       if (!PAYMENT_GATEWAY_ENABLED) {
         setSubmitNotice(
-          `Pesanan valid dengan total ${formatIDR(data.total)}. Integrasi pembayaran Midtrans belum aktif, jadi pesanan belum dibuat.`
+          `Pesanan valid dikirim ke ${selectedAddress?.label} (${selectedAddress?.city}) dengan total ${formatIDR(data.total)}. Integrasi pembayaran Midtrans belum aktif, jadi pesanan belum dibuat.`
         );
         return;
       }
 
-      // TODO (Midtrans): POST /api/checkout → buat Order + Payment, dapatkan snapToken,
-      // lalu panggil window.snap.pay(snapToken) dan arahkan ke /orders/[id].
+      // TODO (Midtrans): POST /api/checkout dengan selectedAddress.id → buat Order + Payment,
+      // dapatkan snapToken, lalu panggil window.snap.pay(snapToken) dan arahkan ke /orders/[id].
     } catch (err) {
       setSubmitNotice(err instanceof Error ? err.message : "Terjadi kesalahan.");
     } finally {
@@ -220,8 +257,8 @@ export default function CheckoutPage() {
     }
   };
 
-  // ── Loading awal (keranjang belum dimuat dari localStorage) ──
-  if (!isHydrated) {
+  // ── Loading awal ──
+  if (!isHydrated || authStatus === "loading") {
     return (
       <div className="min-h-screen bg-white text-neutral-950 font-[Inter,sans-serif]">
         <Navbar />
@@ -259,7 +296,6 @@ export default function CheckoutPage() {
     );
   }
 
-  // Gambar fallback dari keranjang bila server belum merespons.
   const cartImageByKey = new Map(cart.map((i) => [`${i.id}::${i.size.toUpperCase()}`, i]));
   const summaryLines: QuoteLine[] =
     quote?.lines ??
@@ -297,145 +333,108 @@ export default function CheckoutPage() {
           <form onSubmit={handleSubmit} noValidate className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14">
             {/* ═════════ KOLOM KIRI ═════════ */}
             <div className="lg:col-span-7 space-y-12">
-              {/* 01 ALAMAT */}
+              {/* 01 ALAMAT PENGIRIMAN (TERHUBUNG KE BUKU ALAMAT) */}
               <section aria-labelledby="sec-address">
-                <div className="flex items-baseline gap-3 border-b border-neutral-200 pb-3">
-                  <span className="font-mono text-xs font-bold text-neutral-400">01</span>
-                  <h2 id="sec-address" className="text-sm font-black uppercase tracking-[0.15em] font-[Montserrat,sans-serif]">
-                    Alamat Pengiriman
-                  </h2>
+                <div className="flex items-baseline justify-between gap-4 border-b border-neutral-200 pb-3">
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-mono text-xs font-bold text-neutral-400">01</span>
+                    <h2 id="sec-address" className="text-sm font-black uppercase tracking-[0.15em] font-[Montserrat,sans-serif]">
+                      Alamat Pengiriman
+                    </h2>
+                  </div>
+
+                  {selectedAddress && (
+                    <button
+                      type="button"
+                      onClick={() => setIsPickerOpen(true)}
+                      className="text-[11px] font-bold uppercase tracking-[0.14em] text-emerald-700 hover:underline cursor-pointer"
+                    >
+                      Ubah Alamat
+                    </button>
+                  )}
                 </div>
 
-                <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div>
-                    <label htmlFor="field-recipientName" className={labelClass}>
-                      Nama Penerima<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="field-recipientName"
-                      autoComplete="name"
-                      value={form.recipientName}
-                      onChange={(e) => updateField("recipientName", e.target.value)}
-                      className={inputClass(errors.recipientName)}
-                      placeholder="Nama lengkap"
-                    />
-                    {errors.recipientName && <p className="mt-1 text-xs text-red-600">{errors.recipientName}</p>}
-                  </div>
+                <div id="field-address" tabIndex={-1} className="mt-5 focus:outline-none">
+                  {addressesLoading ? (
+                    <div className="h-32 border border-neutral-200 bg-neutral-100 animate-pulse" />
+                  ) : selectedAddress ? (
+                    <div className="border border-neutral-950 bg-neutral-50/50 p-5 space-y-2.5">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-bold text-neutral-950">
+                            {selectedAddress.recipientName}
+                          </span>
+                          <span className="text-neutral-300">|</span>
+                          <span className="font-mono text-xs text-neutral-600">
+                            {selectedAddress.phone}
+                          </span>
+                        </div>
 
-                  <div>
-                    <label htmlFor="field-phone" className={labelClass}>
-                      No. HP / WhatsApp<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="field-phone"
-                      type="tel"
-                      inputMode="tel"
-                      autoComplete="tel"
-                      value={form.phone}
-                      onChange={(e) => updateField("phone", e.target.value)}
-                      className={inputClass(errors.phone)}
-                      placeholder="0812xxxxxxxx"
-                    />
-                    {errors.phone && <p className="mt-1 text-xs text-red-600">{errors.phone}</p>}
-                  </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="border border-neutral-300 bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-neutral-700">
+                            {selectedAddress.label}
+                          </span>
+                          {selectedAddress.isPrimary && (
+                            <span className="border border-emerald-700 bg-emerald-700 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+                              Utama
+                            </span>
+                          )}
+                        </div>
+                      </div>
 
-                  <div>
-                    <label htmlFor="field-province" className={labelClass}>
-                      Provinsi<span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="field-province"
-                      value={form.province}
-                      onChange={(e) => updateField("province", e.target.value)}
-                      className={inputClass(errors.province)}
-                    >
-                      <option value="">Pilih provinsi</option>
-                      {PROVINCES.map((p) => (
-                        <option key={p} value={p}>
-                          {p}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.province && <p className="mt-1 text-xs text-red-600">{errors.province}</p>}
-                  </div>
+                      <p className="text-xs text-neutral-700 leading-relaxed">
+                        {selectedAddress.fullAddress}
+                      </p>
+                      <p className="text-xs text-neutral-500 uppercase tracking-wide">
+                        Kec. {selectedAddress.district}, {selectedAddress.city}, {selectedAddress.province},{" "}
+                        {selectedAddress.postalCode}
+                      </p>
+                      {selectedAddress.notes && (
+                        <p className="text-[11px] text-neutral-500">
+                          Catatan: <span className="italic">{selectedAddress.notes}</span>
+                        </p>
+                      )}
 
-                  <div>
-                    <label htmlFor="field-city" className={labelClass}>
-                      Kota / Kabupaten<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="field-city"
-                      autoComplete="address-level2"
-                      value={form.city}
-                      onChange={(e) => updateField("city", e.target.value)}
-                      className={inputClass(errors.city)}
-                      placeholder="Contoh: Kota Bandung"
-                    />
-                    {errors.city && <p className="mt-1 text-xs text-red-600">{errors.city}</p>}
-                  </div>
-
-                  <div>
-                    <label htmlFor="field-district" className={labelClass}>
-                      Kecamatan<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="field-district"
-                      autoComplete="address-level3"
-                      value={form.district}
-                      onChange={(e) => updateField("district", e.target.value)}
-                      className={inputClass(errors.district)}
-                      placeholder="Contoh: Coblong"
-                    />
-                    {errors.district && <p className="mt-1 text-xs text-red-600">{errors.district}</p>}
-                  </div>
-
-                  <div>
-                    <label htmlFor="field-postalCode" className={labelClass}>
-                      Kode Pos<span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="field-postalCode"
-                      inputMode="numeric"
-                      autoComplete="postal-code"
-                      maxLength={5}
-                      value={form.postalCode}
-                      onChange={(e) => updateField("postalCode", e.target.value.replace(/\D/g, ""))}
-                      className={inputClass(errors.postalCode)}
-                      placeholder="40132"
-                    />
-                    {errors.postalCode && <p className="mt-1 text-xs text-red-600">{errors.postalCode}</p>}
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label htmlFor="field-address" className={labelClass}>
-                      Alamat Lengkap<span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      id="field-address"
-                      rows={3}
-                      autoComplete="street-address"
-                      value={form.address}
-                      onChange={(e) => updateField("address", e.target.value)}
-                      className={inputClass(errors.address)}
-                      placeholder="Nama jalan, nomor rumah, RT/RW, patokan"
-                    />
-                    {errors.address && <p className="mt-1 text-xs text-red-600">{errors.address}</p>}
-                  </div>
-
-                  <div className="sm:col-span-2">
-                    <label htmlFor="field-notes" className={labelClass}>
-                      Catatan untuk Kurir <span className="normal-case tracking-normal font-normal text-neutral-400">(opsional)</span>
-                    </label>
-                    <input
-                      id="field-notes"
-                      value={form.notes}
-                      onChange={(e) => updateField("notes", e.target.value)}
-                      className={inputClass(errors.notes)}
-                      placeholder="Contoh: titip di pos satpam"
-                      maxLength={200}
-                    />
-                    {errors.notes && <p className="mt-1 text-xs text-red-600">{errors.notes}</p>}
-                  </div>
+                      <div className="pt-2 border-t border-neutral-200/80 flex flex-wrap items-center justify-between gap-2">
+                        <span className="text-[11px] text-neutral-500">
+                          {addresses.length} alamat tersimpan di buku alamat
+                        </span>
+                        <div className="flex items-center gap-4">
+                          <button
+                            type="button"
+                            onClick={() => setFormModal({ open: true, editing: selectedAddress })}
+                            className="text-[11px] font-semibold text-neutral-600 hover:text-neutral-950 underline underline-offset-4 cursor-pointer"
+                          >
+                            Edit Alamat Ini
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setIsPickerOpen(true)}
+                            className="text-[11px] font-bold text-neutral-950 hover:text-emerald-700 underline underline-offset-4 cursor-pointer"
+                          >
+                            Pilih Alamat Lain →
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="border border-dashed border-neutral-300 p-6 text-center space-y-3">
+                      <p className="text-xs font-semibold text-neutral-800">
+                        Anda belum memiliki alamat pengiriman tersimpan.
+                      </p>
+                      <p className="text-[11px] text-neutral-500">
+                        Tambahkan alamat terlebih dahulu agar ongkos kirim kurir dapat dihitung otomatis.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setFormModal({ open: true, editing: null })}
+                        className="inline-block bg-neutral-950 px-5 py-3 text-[11px] font-bold uppercase tracking-[0.15em] text-white hover:bg-emerald-700 transition-colors font-[Montserrat,sans-serif] cursor-pointer"
+                      >
+                        + Tambah Alamat Pengiriman
+                      </button>
+                    </div>
+                  )}
+                  {errors.address && <p className="mt-2 text-xs text-red-600">{errors.address}</p>}
                 </div>
               </section>
 
@@ -449,9 +448,9 @@ export default function CheckoutPage() {
                 </div>
 
                 <div id="field-shipping" tabIndex={-1} className="mt-6 space-y-3 focus:outline-none">
-                  {!form.province ? (
+                  {!selectedProvince ? (
                     <p className="border border-dashed border-neutral-300 px-4 py-6 text-center text-xs text-neutral-500">
-                      Pilih provinsi terlebih dahulu untuk melihat pilihan kurir dan ongkos kirim.
+                      Tambahkan atau pilih alamat pengiriman terlebih dahulu untuk melihat ongkos kirim.
                     </p>
                   ) : quoteLoading && !quote?.shippingRates.length ? (
                     <div className="space-y-3">
@@ -521,7 +520,7 @@ export default function CheckoutPage() {
                         })}
                       </div>
                       <p className="text-[10px] text-neutral-400">
-                        Ongkos kirim merupakan estimasi berdasarkan provinsi tujuan dan berat ±400 g per item.
+                        Ongkos kirim dihitung otomatis ke tujuan {selectedProvince} (estimasi ±400 g per item).
                       </p>
                     </>
                   ) : (
@@ -611,6 +610,7 @@ export default function CheckoutPage() {
                     return (
                       <li key={`${l.productId}-${l.size}`} className="flex gap-3.5 py-4">
                         <div className="h-20 w-16 flex-shrink-0 overflow-hidden border border-neutral-200/70 bg-neutral-100">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           {img && <img src={img} alt={l.name ?? ""} className="h-full w-full object-cover" />}
                         </div>
                         <div className="flex min-w-0 flex-1 flex-col justify-between">
@@ -706,6 +706,125 @@ export default function CheckoutPage() {
           </form>
         </main>
       </PageTransition>
+
+      {/* ═════════ MODAL PILIH ALAMAT ALA SHOPEE ═════════ */}
+      {isPickerOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-950/50 backdrop-blur-[2px] p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsPickerOpen(false);
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Pilih Alamat Pengiriman"
+            className="w-full max-w-xl max-h-[88vh] flex flex-col border border-neutral-950 bg-white"
+          >
+            <div className="flex items-center justify-between border-b border-neutral-200 px-6 py-4">
+              <div>
+                <h2 className="text-base font-black uppercase tracking-tight text-neutral-950 font-[Montserrat,sans-serif]">
+                  Pilih Alamat Pengiriman
+                </h2>
+                <p className="font-mono text-[10px] text-neutral-400">
+                  {addresses.length} / {MAX_ADDRESSES_PER_USER} alamat tersimpan
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPickerOpen(false)}
+                aria-label="Tutup pemilih alamat"
+                className="border border-neutral-200 px-2.5 py-1 font-mono text-xs text-neutral-500 hover:border-neutral-950 hover:text-neutral-950 cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto divide-y divide-neutral-100 px-6">
+              {addresses.map((addr) => {
+                const isSelected = addr.id === selectedAddress?.id;
+                return (
+                  <div key={addr.id} className="py-4 flex items-start justify-between gap-4">
+                    <label className="flex items-start gap-3 flex-1 min-w-0 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="checkout-address"
+                        checked={isSelected}
+                        onChange={() => {
+                          setSelectedAddressId(addr.id);
+                          setErrors((prev) => ({ ...prev, address: undefined }));
+                          setIsPickerOpen(false);
+                        }}
+                        className="mt-1 h-4 w-4 accent-neutral-950 flex-shrink-0"
+                      />
+                      <div className="space-y-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-xs font-bold text-neutral-950">{addr.recipientName}</span>
+                          <span className="text-neutral-300">|</span>
+                          <span className="font-mono text-[11px] text-neutral-600">{addr.phone}</span>
+                          <span className="border border-neutral-200 px-1.5 py-0.5 text-[9px] font-bold uppercase text-neutral-600">
+                            {addr.label}
+                          </span>
+                          {addr.isPrimary && (
+                            <span className="bg-emerald-700 px-1.5 py-0.5 text-[9px] font-bold uppercase text-white">
+                              Utama
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-neutral-700 leading-relaxed">{addr.fullAddress}</p>
+                        <p className="text-[11px] text-neutral-500">
+                          Kec. {addr.district}, {addr.city}, {addr.province} {addr.postalCode}
+                        </p>
+                      </div>
+                    </label>
+
+                    <button
+                      type="button"
+                      onClick={() => setFormModal({ open: true, editing: addr })}
+                      className="text-[11px] font-bold uppercase tracking-wider text-neutral-600 hover:text-neutral-950 underline flex-shrink-0 cursor-pointer"
+                    >
+                      Ubah
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="border-t border-neutral-200 px-6 py-4 flex flex-wrap items-center justify-between gap-3 bg-neutral-50">
+              <button
+                type="button"
+                disabled={addresses.length >= MAX_ADDRESSES_PER_USER}
+                onClick={() => setFormModal({ open: true, editing: null })}
+                className="border border-neutral-950 bg-white px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-950 hover:bg-neutral-950 hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              >
+                {addresses.length >= MAX_ADDRESSES_PER_USER
+                  ? `Maksimal ${MAX_ADDRESSES_PER_USER} Alamat`
+                  : "+ Tambah Alamat Baru"}
+              </button>
+
+              <Link
+                href="/account/addresses"
+                className="text-[11px] font-semibold text-neutral-500 hover:text-neutral-950 underline"
+              >
+                Kelola Buku Alamat →
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ═════════ MODAL TAMBAH / EDIT ALAMAT ═════════ */}
+      {formModal.open && (
+        <AddressFormModal
+          key={formModal.editing?.id ?? "new-checkout"}
+          initialAddress={formModal.editing}
+          forcePrimary={!formModal.editing && addresses.length === 0}
+          defaultRecipientName={user?.name ?? ""}
+          defaultPhone={user?.phone ?? ""}
+          onClose={() => setFormModal({ open: false, editing: null })}
+          onSaved={handleAddressSaved}
+        />
+      )}
     </div>
   );
 }

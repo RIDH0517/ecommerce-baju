@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/app/(store)/components/Navbar";
 import PageTransition from "@/app/(store)/components/PageTransition";
 import AccountNav from "@/app/(store)/account/_components/AccountNav";
 import { useAuth, type AuthUser } from "@/app/(store)/context/AuthContext";
+import type { UserAddress } from "@/lib/addresses";
 
 const labelClass = "block text-[11px] font-bold uppercase tracking-[0.15em] text-neutral-600";
 const inputClass =
@@ -17,9 +19,28 @@ function ProfileEditor({ initialUser }: { initialUser: AuthUser }) {
   // Form data diri
   const [name, setName] = useState(initialUser.name);
   const [phone, setPhone] = useState(initialUser.phone ?? "");
-  const [address, setAddress] = useState(initialUser.address ?? "");
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileMsg, setProfileMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
+
+  // Ringkasan Alamat Utama dari Buku Alamat
+  const [primaryAddress, setPrimaryAddress] = useState<UserAddress | null>(null);
+  const [addressCount, setAddressCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/account/addresses", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!active || !data?.addresses) return;
+        const list = data.addresses as UserAddress[];
+        setAddressCount(list.length);
+        setPrimaryAddress(list.find((a) => a.isPrimary) ?? list[0] ?? null);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
 
   // Form ganti password
   const [currentPassword, setCurrentPassword] = useState("");
@@ -43,7 +64,7 @@ function ProfileEditor({ initialUser }: { initialUser: AuthUser }) {
       const res = await fetch("/api/account/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, phone, address }),
+        body: JSON.stringify({ name, phone, address: initialUser.address }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Gagal menyimpan profil.");
@@ -155,19 +176,37 @@ function ProfileEditor({ initialUser }: { initialUser: AuthUser }) {
             </p>
           </div>
 
-          <div>
-            <label htmlFor="profile-address" className={labelClass}>
-              Alamat Pengiriman Utama
-            </label>
-            <textarea
-              id="profile-address"
-              rows={3}
-              maxLength={500}
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className={inputClass}
-              placeholder="Nama jalan, nomor rumah, RT/RW, patokan"
-            />
+          <div className="border border-neutral-200 bg-neutral-50 p-4 space-y-2.5">
+            <div className="flex items-center justify-between gap-2">
+              <span className={labelClass}>
+                Buku Alamat {addressCount !== null ? `(${addressCount})` : ""}
+              </span>
+              <Link
+                href="/account/addresses"
+                className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 hover:underline"
+              >
+                Kelola Daftar Alamat →
+              </Link>
+            </div>
+            {primaryAddress ? (
+              <div className="text-xs text-neutral-700 space-y-1">
+                <p className="font-semibold text-neutral-950">
+                  {primaryAddress.recipientName} · {primaryAddress.phone}{" "}
+                  <span className="ml-1 bg-neutral-950 px-1.5 py-0.5 text-[9px] font-bold uppercase text-white">
+                    {primaryAddress.label} · Utama
+                  </span>
+                </p>
+                <p>{primaryAddress.fullAddress}</p>
+                <p className="text-[11px] text-neutral-500">
+                  Kec. {primaryAddress.district}, {primaryAddress.city}, {primaryAddress.province}{" "}
+                  {primaryAddress.postalCode}
+                </p>
+              </div>
+            ) : (
+              <p className="text-xs text-neutral-500">
+                Belum ada alamat tersimpan. Tambahkan beberapa alamat pengiriman (Rumah, Kantor, dll.) di halaman Alamat Saya.
+              </p>
+            )}
           </div>
 
           {profileMsg && (

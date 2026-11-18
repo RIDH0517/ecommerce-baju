@@ -17,6 +17,7 @@ export default function AccountNav({ title }: { title: string }) {
 
   const tabs = [
     { label: "Profil Saya", href: "/account/profile", active: pathname.startsWith("/account/profile") },
+    { label: "Alamat Saya", href: "/account/addresses", active: pathname.startsWith("/account/addresses") },
     { label: "Pesanan Saya", href: "/account/orders", active: pathname.startsWith("/account/orders") },
   ];
 

@@ -118,12 +118,22 @@ export default function ProfileMenu() {
 
             <Link
               role="menuitem"
+              href="/account/addresses"
+              onClick={() => setOpenForPath(null)}
+              className="flex items-center justify-between px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.15em] text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
+            >
+              <span>Alamat Saya</span>
+              <span className="font-mono text-[10px] text-neutral-400">02</span>
+            </Link>
+
+            <Link
+              role="menuitem"
               href="/account/orders"
               onClick={() => setOpenForPath(null)}
               className="flex items-center justify-between px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.15em] text-neutral-800 hover:bg-neutral-100 hover:text-neutral-950 transition-colors"
             >
               <span>Pesanan Saya</span>
-              <span className="font-mono text-[10px] text-neutral-400">02</span>
+              <span className="font-mono text-[10px] text-neutral-400">03</span>
             </Link>
 
             {user.role === "ADMIN" && (
