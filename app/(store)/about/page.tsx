@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Navbar from "@/app/(store)/components/Navbar";
+import Footer from "@/app/(store)/components/Footer";
 import PageTransition from "@/app/(store)/components/PageTransition";
 
 export default function AboutPage() {
@@ -13,6 +14,9 @@ export default function AboutPage() {
         <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-14 space-y-16">
           {/* Header */}
           <section className="space-y-4 border-b border-neutral-200 pb-10">
+            <span className="inline-block font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-700">
+              Brand Story
+            </span>
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-[1.1] font-[Montserrat,sans-serif]">
               Tentang urban.kamen
             </h1>
@@ -22,8 +26,11 @@ export default function AboutPage() {
           </section>
 
           {/* 3 Pilar Kualitas */}
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="border border-neutral-200 p-6 space-y-2.5">
+          <section className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="border border-neutral-200/80 bg-white p-6 space-y-3 transition-all duration-300 hover:border-neutral-950 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+              <span className="block font-mono text-[11px] font-bold tracking-[0.2em] text-emerald-700">
+                01
+              </span>
               <h2 className="text-sm font-black uppercase tracking-wider font-[Montserrat,sans-serif]">
                 Bahan Berkualitas
               </h2>
@@ -32,7 +39,10 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="border border-neutral-200 p-6 space-y-2.5">
+            <div className="border border-neutral-200/80 bg-white p-6 space-y-3 transition-all duration-300 hover:border-neutral-950 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+              <span className="block font-mono text-[11px] font-bold tracking-[0.2em] text-emerald-700">
+                02
+              </span>
               <h2 className="text-sm font-black uppercase tracking-wider font-[Montserrat,sans-serif]">
                 Jahitan Rapi &amp; Tahan Lama
               </h2>
@@ -41,7 +51,10 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="border border-neutral-200 p-6 space-y-2.5">
+            <div className="border border-neutral-200/80 bg-white p-6 space-y-3 transition-all duration-300 hover:border-neutral-950 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+              <span className="block font-mono text-[11px] font-bold tracking-[0.2em] text-emerald-700">
+                03
+              </span>
               <h2 className="text-sm font-black uppercase tracking-wider font-[Montserrat,sans-serif]">
                 Ulasan Pelanggan Asli
               </h2>
@@ -69,6 +82,7 @@ export default function AboutPage() {
             </Link>
           </section>
         </main>
+        <Footer />
       </PageTransition>
     </div>
   );

@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/app/(store)/components/Navbar";
+import Footer from "@/app/(store)/components/Footer";
 import PageTransition from "@/app/(store)/components/PageTransition";
 import { useCart } from "@/app/(store)/context/CartContext";
 
@@ -46,14 +47,14 @@ function formatIDR(n: number) {
 
 export default function ProductDetailPage() {
   const params = useParams();
-  const router = useRouter();
   const productId = typeof params?.id === "string" ? params.id : "";
 
-  const { addToCart, isLoggedIn, purchasedIds, markAsPurchased, reviews, addReview } = useCart();
+  const { addToCart, isLoggedIn, purchasedIds, reviews, addReview } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loadedId, setLoadedId] = useState("");
   const [notFound, setNotFound] = useState(false);
+  const isLoading = Boolean(productId) && loadedId !== productId;
 
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [quantity, setQuantity] = useState(1);
@@ -66,21 +67,32 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     if (!productId) return;
-    setIsLoading(true);
+    let active = true;
     fetch(`/api/products/${productId}`)
       .then((res) => {
-        if (!res.ok) { setNotFound(true); return null; }
+        if (!res.ok) {
+          if (active) setNotFound(true);
+          return null;
+        }
         return res.json();
       })
       .then((data: Product | null) => {
-        if (!data) return;
+        if (!active || !data) return;
         setProduct(data);
-        // Default ke ukuran pertama yang masih ada stok
+        setNotFound(false);
         const firstAvailable = data.sizes?.find((s) => s.stock > 0)?.size || data.sizes?.[0]?.size || "M";
         setSelectedSize(firstAvailable);
       })
-      .catch(() => setNotFound(true))
-      .finally(() => setIsLoading(false));
+      .catch(() => {
+        if (active) setNotFound(true);
+      })
+      .finally(() => {
+        if (active) setLoadedId(productId);
+      });
+
+    return () => {
+      active = false;
+    };
   }, [productId]);
 
   if (isLoading) {
@@ -128,6 +140,12 @@ export default function ProductDetailPage() {
       ? [...product.images].sort((a, b) => a.order - b.order)
       : [{ id: "main", url: product.imageUrl, order: 0 }];
 
+  const safeImageIdx = galleryImages.length > 0 ? activeImageIdx % galleryImages.length : 0;
+  const goPrevImage = () =>
+    setActiveImageIdx((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  const goNextImage = () =>
+    setActiveImageIdx((prev) => (prev + 1) % galleryImages.length);
+
   const selectedSizeData = product.sizes?.find((s) => s.size === selectedSize);
   const selectedSizeStock = selectedSizeData?.stock ?? product.stock;
 
@@ -144,14 +162,6 @@ export default function ProductDetailPage() {
       },
       quantity
     );
-  };
-
-  const handleDirectPurchaseSimulation = () => {
-    if (!isLoggedIn) {
-      router.push(`/login?next=${encodeURIComponent(`/product/${product.id}`)}`);
-      return;
-    }
-    markAsPurchased([product.id]);
   };
 
   const handleReviewSubmit = (e: React.FormEvent) => {
@@ -183,9 +193,9 @@ export default function ProductDetailPage() {
             {/* ── Galeri Foto ── */}
             <div className="md:col-span-6 space-y-3">
               {/* Foto Utama */}
-              <div className="relative aspect-[4/5] w-full bg-neutral-100 border border-neutral-200 overflow-hidden">
+              <div className="group relative aspect-[4/5] w-full bg-neutral-100 border border-neutral-200/80 overflow-hidden">
                 {product.discount && (
-                  <span className="absolute top-4 left-4 z-10 bg-neutral-950 px-3 py-1 font-mono text-[11px] font-bold uppercase tracking-widest text-white">
+                  <span className="absolute top-4 left-4 z-10 bg-neutral-950/95 px-3 py-1 font-mono text-[11px] font-bold uppercase tracking-widest text-white">
                     {product.discount}
                   </span>
                 )}
@@ -196,24 +206,49 @@ export default function ProductDetailPage() {
                 )}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={galleryImages[activeImageIdx]?.url}
+                  src={galleryImages[safeImageIdx]?.url}
                   alt={product.name}
                   className="h-full w-full object-cover transition-opacity duration-300"
                 />
+
+                {galleryImages.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={goPrevImage}
+                      aria-label="Foto sebelumnya"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 z-10 h-9 w-9 border border-neutral-200/80 bg-white/90 backdrop-blur-sm flex items-center justify-center font-mono text-xs text-neutral-950 hover:bg-neutral-950 hover:text-white hover:border-neutral-950 transition-all cursor-pointer sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
+                    >
+                      ←
+                    </button>
+                    <button
+                      type="button"
+                      onClick={goNextImage}
+                      aria-label="Foto berikutnya"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 h-9 w-9 border border-neutral-200/80 bg-white/90 backdrop-blur-sm flex items-center justify-center font-mono text-xs text-neutral-950 hover:bg-neutral-950 hover:text-white hover:border-neutral-950 transition-all cursor-pointer sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
+                    >
+                      →
+                    </button>
+                    <span className="absolute bottom-3 right-3 z-10 bg-white/90 backdrop-blur-sm border border-neutral-200/80 px-2.5 py-1 font-mono text-[10px] font-bold tracking-wider text-neutral-900 tabular-nums">
+                      {String(safeImageIdx + 1).padStart(2, "0")} /{" "}
+                      {String(galleryImages.length).padStart(2, "0")}
+                    </span>
+                  </>
+                )}
               </div>
 
               {/* Thumbnail Strip */}
               {galleryImages.length > 1 && (
-                <div className="flex gap-2 overflow-x-auto pb-1">
+                <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
                   {galleryImages.map((img, idx) => (
                     <button
                       key={img.id}
                       type="button"
                       onClick={() => setActiveImageIdx(idx)}
-                      className={`flex-shrink-0 h-16 w-14 border-2 overflow-hidden transition-all ${
-                        activeImageIdx === idx
-                          ? "border-neutral-950"
-                          : "border-neutral-200 hover:border-neutral-400"
+                      className={`flex-shrink-0 h-16 w-14 border transition-all cursor-pointer overflow-hidden ${
+                        safeImageIdx === idx
+                          ? "border-neutral-950 ring-1 ring-neutral-950"
+                          : "border-neutral-200 hover:border-neutral-400 opacity-75 hover:opacity-100"
                       }`}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -244,7 +279,7 @@ export default function ProductDetailPage() {
                   {product.name}
                 </h1>
 
-                <div className="flex items-baseline space-x-3 font-mono pt-1">
+                <div className="flex items-baseline space-x-3 font-mono tabular-nums pt-1">
                   <span className="text-2xl font-bold text-neutral-950">
                     {formatIDR(Number(product.price))}
                   </span>
@@ -256,7 +291,7 @@ export default function ProductDetailPage() {
                 </div>
 
                 {product.description && (
-                  <p className="text-xs sm:text-sm leading-relaxed text-neutral-600 pt-2 border-t border-neutral-200">
+                  <p className="text-xs sm:text-sm leading-relaxed text-neutral-600 pt-3 border-t border-neutral-200/80">
                     {product.description}
                   </p>
                 )}
@@ -280,7 +315,7 @@ export default function ProductDetailPage() {
               </div>
 
               {/* Pemilih Ukuran & Cart */}
-              <div className="space-y-5 pt-6 border-t border-neutral-200">
+              <div className="space-y-5 pt-6 border-t border-neutral-200/80">
                 {/* Size selector */}
                 {product.sizes?.length > 0 ? (
                   <div>
@@ -304,12 +339,12 @@ export default function ProductDetailPage() {
                           disabled={sz.stock <= 0}
                           onClick={() => setSelectedSize(sz.size)}
                           title={sz.stock <= 0 ? "Stok habis" : `${sz.stock} pcs tersedia`}
-                          className={`min-w-[52px] px-3 py-2.5 text-xs font-mono font-bold border transition-all ${
+                          className={`min-w-[52px] px-3.5 py-2.5 text-xs font-mono font-bold border transition-all ${
                             sz.stock <= 0
                               ? "border-neutral-200 text-neutral-300 cursor-not-allowed line-through bg-neutral-50"
                               : selectedSize === sz.size
                               ? "border-neutral-950 bg-neutral-950 text-white"
-                              : "border-neutral-300 bg-white text-neutral-800 hover:border-neutral-950 cursor-pointer"
+                              : "border-neutral-200 bg-white text-neutral-800 hover:border-neutral-950 hover:bg-neutral-50 cursor-pointer"
                           }`}
                         >
                           {sz.size}
@@ -332,22 +367,22 @@ export default function ProductDetailPage() {
                 )}
 
                 {/* Quantity & Add to Cart */}
-                <div className="flex space-x-3">
-                  <div className="flex items-center border border-neutral-300 bg-white">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex items-center justify-between sm:justify-start border border-neutral-200 bg-white">
                     <button
                       type="button"
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-10 h-12 text-sm font-bold hover:bg-neutral-100 cursor-pointer"
+                      className="w-12 sm:w-10 h-12 text-sm font-bold hover:bg-neutral-100 cursor-pointer transition-colors"
                     >
                       −
                     </button>
-                    <span className="w-10 text-center font-mono text-xs font-bold">{quantity}</span>
+                    <span className="w-12 sm:w-10 text-center font-mono text-xs font-bold tabular-nums">{quantity}</span>
                     <button
                       type="button"
                       onClick={() =>
                         setQuantity(Math.min(quantity + 1, selectedSizeStock || product.stock))
                       }
-                      className="w-10 h-12 text-sm font-bold hover:bg-neutral-100 cursor-pointer"
+                      className="w-12 sm:w-10 h-12 text-sm font-bold hover:bg-neutral-100 cursor-pointer transition-colors"
                     >
                       +
                     </button>
@@ -357,30 +392,12 @@ export default function ProductDetailPage() {
                     type="button"
                     onClick={handleAddToCart}
                     disabled={selectedSizeStock <= 0}
-                    className="flex-1 bg-neutral-950 hover:bg-emerald-700 disabled:bg-neutral-300 disabled:cursor-not-allowed text-white text-xs font-bold uppercase tracking-[0.18em] transition-colors cursor-pointer font-[Montserrat,sans-serif]"
+                    className="flex-1 bg-neutral-950 hover:bg-emerald-700 disabled:bg-neutral-300 disabled:cursor-not-allowed text-white py-3.5 px-4 text-xs font-bold uppercase tracking-[0.16em] transition-colors cursor-pointer font-[Montserrat,sans-serif] tabular-nums"
                   >
                     {selectedSizeStock <= 0
                       ? "Stok Habis"
                       : `+ Add to Bag — ${formatIDR(Number(product.price) * quantity)}`}
                   </button>
-                </div>
-
-                {/* Simulasi pembelian (unlock review) */}
-                <div className="pt-2">
-                  {hasPurchased ? (
-                    <div className="border border-emerald-200 bg-emerald-50/70 px-4 py-2.5 text-xs text-emerald-900 flex items-center justify-between">
-                      <span className="font-medium">Status: Anda telah membeli produk ini (Verified Buyer).</span>
-                      <a href="#reviews" className="font-bold underline">Tulis Ulasan ↓</a>
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={handleDirectPurchaseSimulation}
-                      className="w-full border border-neutral-300 hover:border-neutral-950 py-2.5 text-[11px] font-semibold text-neutral-600 hover:text-neutral-950 transition-colors cursor-pointer"
-                    >
-                      Simulasi Selesaikan Pembelian Produk Ini (Aktifkan Hak Ulasan Pembeli)
-                    </button>
-                  )}
                 </div>
               </div>
             </div>
@@ -399,7 +416,7 @@ export default function ProductDetailPage() {
                 </p>
 
                 {!isLoggedIn ? (
-                  <div className="border border-neutral-200 bg-neutral-50 p-6 space-y-4">
+                  <div className="border border-neutral-200/80 bg-neutral-50/70 p-6 space-y-4">
                     <p className="text-xs font-semibold text-neutral-800">Ingin memberikan ulasan?</p>
                     <p className="text-xs text-neutral-500">
                       Silakan masuk ke akun urban.kamen Anda terlebih dahulu.
@@ -412,21 +429,12 @@ export default function ProductDetailPage() {
                     </Link>
                   </div>
                 ) : !hasPurchased ? (
-                  <div className="border border-neutral-200 bg-neutral-50 p-6 space-y-4">
-                    <span className="inline-block bg-neutral-200 px-2.5 py-0.5 font-mono text-[10px] font-bold uppercase text-neutral-700">
-                      Verified Buyers Only
-                    </span>
+                  <div className="border border-neutral-200/80 bg-neutral-50/70 p-6 space-y-2">
+                    <p className="text-xs font-semibold text-neutral-800">Khusus Pembeli Terverifikasi</p>
                     <p className="text-xs text-neutral-600 leading-relaxed">
-                      Akun Anda belum memiliki riwayat pembelian untuk artikel{" "}
-                      <strong>{product.name}</strong>.
+                      Hanya akun yang telah menyelesaikan pembelian artikel{" "}
+                      <strong>{product.name}</strong> yang dapat menulis ulasan.
                     </p>
-                    <button
-                      type="button"
-                      onClick={handleDirectPurchaseSimulation}
-                      className="bg-neutral-950 text-white px-4 py-2.5 text-[11px] font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors cursor-pointer"
-                    >
-                      Beli Sekarang & Buka Form Ulasan
-                    </button>
                   </div>
                 ) : (
                   <form
@@ -473,7 +481,7 @@ export default function ProductDetailPage() {
                         value={commentInput}
                         onChange={(e) => setCommentInput(e.target.value)}
                         placeholder="Bagikan pendapat Anda mengenai kualitas jahitan, ketebalan bahan, dan kecocokan ukuran..."
-                        className="w-full border border-neutral-300 p-3 text-xs focus:border-neutral-950 focus:outline-none"
+                        className="w-full border border-neutral-200 bg-neutral-50/50 p-3 text-xs focus:bg-white focus:border-neutral-950 focus:outline-none transition-colors"
                       />
                     </div>
 
@@ -494,18 +502,25 @@ export default function ProductDetailPage() {
               </div>
 
               {/* Daftar Ulasan */}
-              <div className="lg:col-span-7 divide-y divide-neutral-200 border-t lg:border-t-0 border-neutral-200">
+              <div className="lg:col-span-7 space-y-4">
                 {productReviews.length === 0 ? (
-                  <p className="py-8 text-xs text-neutral-500">
-                    Belum ada ulasan. Jadilah pembeli pertama yang memberikan ulasan.
-                  </p>
+                  <div className="border border-neutral-200/80 bg-neutral-50/40 p-8 text-center">
+                    <p className="text-xs text-neutral-500">
+                      Belum ada ulasan. Jadilah pembeli pertama yang memberikan ulasan.
+                    </p>
+                  </div>
                 ) : (
                   productReviews.map((rev) => (
-                    <div key={rev.id} className="py-6 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2.5">
-                          <span className="text-xs font-bold text-neutral-950">{rev.userName}</span>
-                          <span className="bg-emerald-50 border border-emerald-200 px-2 py-0.5 font-mono text-[10px] font-semibold text-emerald-800">
+                    <div
+                      key={rev.id}
+                      className="border border-neutral-200/80 bg-white p-5 sm:p-6 space-y-2.5"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-xs font-bold text-neutral-950 font-[Montserrat,sans-serif]">
+                            {rev.userName}
+                          </span>
+                          <span className="bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 font-mono text-[10px] font-semibold text-emerald-800">
                             Verified Purchase — Size {rev.sizePurchased}
                           </span>
                         </div>
@@ -522,7 +537,7 @@ export default function ProductDetailPage() {
                           </svg>
                         ))}
                       </div>
-                      <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed pt-1">
+                      <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed pt-0.5">
                         {rev.comment}
                       </p>
                     </div>
@@ -532,6 +547,7 @@ export default function ProductDetailPage() {
             </div>
           </section>
         </main>
+        <Footer />
       </PageTransition>
     </div>
   );

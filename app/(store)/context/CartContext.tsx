@@ -239,19 +239,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   } | null>(null);
 
   useEffect(() => {
-    try {
-      const savedCart = localStorage.getItem("urbankamen_cart");
-      if (savedCart) setCart(JSON.parse(savedCart));
+    let active = true;
+    Promise.resolve().then(() => {
+      if (!active) return;
+      try {
+        const savedCart = localStorage.getItem("urbankamen_cart");
+        if (savedCart) setCart(JSON.parse(savedCart));
 
-      const savedPurchases = localStorage.getItem("urbankamen_purchased");
-      if (savedPurchases) setPurchasedIds(JSON.parse(savedPurchases));
+        const savedPurchases = localStorage.getItem("urbankamen_purchased");
+        if (savedPurchases) setPurchasedIds(JSON.parse(savedPurchases));
 
-      const savedReviews = localStorage.getItem("urbankamen_reviews");
-      if (savedReviews) setReviews(JSON.parse(savedReviews));
-    } catch (e) {
-      console.error(e);
-    }
-    setIsHydrated(true);
+        const savedReviews = localStorage.getItem("urbankamen_reviews");
+        if (savedReviews) setReviews(JSON.parse(savedReviews));
+      } catch (e) {
+        console.error(e);
+      }
+      setIsHydrated(true);
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -389,14 +396,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
       {/* TOAST NOTIFICATION SAAT TAMBAH KE KERANJANG */}
       <div
-        className={`fixed bottom-6 right-6 z-40 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform ${
+        className={`fixed bottom-4 left-4 right-4 sm:left-auto sm:bottom-6 sm:right-6 z-40 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform ${
           toastProduct && !isCartOpen
             ? "translate-y-0 opacity-100"
             : "translate-y-6 opacity-0 pointer-events-none"
         }`}
       >
         {toastProduct && (
-          <div className="flex items-center space-x-4 bg-neutral-950 text-white p-3 pr-4 shadow-2xl border border-neutral-800 max-w-sm">
+          <div className="flex items-center space-x-3 sm:space-x-4 bg-neutral-950 text-white p-3 pr-3 sm:pr-4 shadow-2xl border border-neutral-800 w-full sm:max-w-sm">
             <img
               src={toastProduct.image}
               alt={toastProduct.name}

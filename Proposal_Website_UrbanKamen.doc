@@ -1,0 +1,599 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="ProgId" content="Word.Document" />
+<meta name="Generator" content="Microsoft Word 15" />
+<title>Proposal Pengembangan Platform E-Commerce Fashion urban.kamen</title>
+<!--[if gte mso 9]>
+<xml>
+  <w:WordDocument>
+    <w:View>Print</w:View>
+    <w:Zoom>100</w:Zoom>
+    <w:DoNotOptimizeForBrowser/>
+  </w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+  @page Section1 {
+    size: 595.3pt 841.9pt;
+    margin: 2.2cm 2.2cm 2.2cm 2.2cm;
+    mso-header-margin: 1.2cm;
+    mso-footer-margin: 1.2cm;
+    mso-paper-source: 0;
+  }
+  div.Section1 {
+    page: Section1;
+  }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: #171717;
+    background-color: #ffffff;
+  }
+  .cover-wrapper {
+    padding-top: 28pt;
+    padding-bottom: 12pt;
+  }
+  .brand-tag {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 10pt;
+    font-weight: bold;
+    letter-spacing: 2pt;
+    color: #047857;
+    text-transform: uppercase;
+    margin-bottom: 10pt;
+  }
+  .cover-title {
+    font-family: Arial, Calibri, sans-serif;
+    font-size: 22pt;
+    font-weight: bold;
+    line-height: 1.25;
+    color: #0a0a0a;
+    margin: 0 0 12pt 0;
+  }
+  .cover-subtitle {
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 12pt;
+    font-style: italic;
+    color: #525252;
+    line-height: 1.45;
+    margin: 0 0 24pt 0;
+  }
+  .accent-bar {
+    height: 4pt;
+    background-color: #0a0a0a;
+    border-bottom: 2pt solid #059669;
+    margin-bottom: 24pt;
+  }
+  h1.chapter {
+    font-family: Arial, Calibri, sans-serif;
+    font-size: 15pt;
+    font-weight: bold;
+    color: #0a0a0a;
+    border-bottom: 1.5pt solid #0a0a0a;
+    padding-bottom: 4pt;
+    margin-top: 18pt;
+    margin-bottom: 10pt;
+    text-transform: uppercase;
+  }
+  h2.section {
+    font-family: Arial, Calibri, sans-serif;
+    font-size: 12pt;
+    font-weight: bold;
+    color: #065f46;
+    margin-top: 14pt;
+    margin-bottom: 6pt;
+  }
+  h3.subsection {
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 11pt;
+    font-weight: bold;
+    color: #171717;
+    margin-top: 10pt;
+    margin-bottom: 4pt;
+  }
+  p {
+    margin-top: 0;
+    margin-bottom: 8pt;
+    text-align: justify;
+  }
+  ul, ol {
+    margin-top: 4pt;
+    margin-bottom: 10pt;
+    padding-left: 18pt;
+  }
+  li {
+    margin-bottom: 4pt;
+    text-align: justify;
+  }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8pt;
+    margin-bottom: 14pt;
+    font-size: 10pt;
+  }
+  table.data-table th {
+    background-color: #0a0a0a;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding: 7pt 8pt;
+    border: 1pt solid #0a0a0a;
+  }
+  table.data-table td {
+    padding: 6.5pt 8pt;
+    border: 1pt solid #d4d4d4;
+    vertical-align: top;
+    text-align: left;
+  }
+  table.data-table tr.alt td {
+    background-color: #fafafa;
+  }
+  table.meta-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 18pt;
+    margin-bottom: 18pt;
+    font-size: 10.5pt;
+  }
+  table.meta-table td {
+    padding: 7pt 10pt;
+    border: 1pt solid #e5e5e5;
+    vertical-align: top;
+  }
+  table.meta-table td.label {
+    width: 34%;
+    font-weight: bold;
+    background-color: #f5f5f5;
+    color: #0a0a0a;
+  }
+  .callout {
+    border-left: 3.5pt solid #059669;
+    background-color: #f0fdf4;
+    padding: 9pt 12pt;
+    margin-top: 8pt;
+    margin-bottom: 12pt;
+    font-size: 10.5pt;
+  }
+  .code-badge {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 9.5pt;
+    background-color: #f5f5f5;
+    padding: 1pt 3pt;
+    border: 0.5pt solid #e5e5e5;
+  }
+  table.sign-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24pt;
+    font-size: 10.5pt;
+  }
+  table.sign-table td {
+    width: 50%;
+    vertical-align: top;
+    text-align: center;
+    padding: 10pt;
+  }
+  .page-break {
+    page-break-before: always;
+    clear: both;
+  }
+</style>
+</head>
+<body>
+<div class="Section1">
+
+  <!-- ==================== HALAMAN SAMPUL ==================== -->
+  <div class="cover-wrapper">
+    <p class="brand-tag">URBAN.KAMEN // DOCUMENT PROPOSAL</p>
+    <p class="cover-title">PROPOSAL PENGEMBANGAN &amp; IMPLEMENTASI PLATFORM E-COMMERCE FASHION &ldquo;URBAN.KAMEN&rdquo;</p>
+    <p class="cover-subtitle">
+      Modern Streetwear &amp; Lifestyle Web Commerce Berbasis Next.js 16, PostgreSQL (Supabase), Multi-Address Book, &amp; Integrasi Logistik/Pembayaran
+    </p>
+    <div class="accent-bar">&nbsp;</div>
+
+    <div class="callout">
+      <strong>Ringkasan Eksekutif:</strong><br />
+      Proposal ini merinci arsitektur sistem, ruang lingkup fitur, standar desain visual <em>Fresh &amp; Clean Minimalist</em>, rancangan basis data, serta rencana deployment produksi pada Virtual Private Server (VPS) untuk platform toko daring resmi merek pakaian <strong>urban.kamen</strong>. Sistem dibangun secara <em>mobile-first</em> dan <em>full-stack</em> untuk menghadirkan pengalaman belanja setara <em>marketplace</em> modern tanpa biaya komisi pihak ketiga.
+    </div>
+
+    <table class="meta-table">
+      <tr>
+        <td class="label">Nama Proyek</td>
+        <td>Platform E-Commerce Fashion <strong>urban.kamen</strong> (Streetwear &amp; Lifestyle Essentials)</td>
+      </tr>
+      <tr>
+        <td class="label">Kategori Sistem</td>
+        <td>Aplikasi Web E-Commerce <em>Full-Stack</em> (Customer Storefront &amp; Admin Dashboard)</td>
+      </tr>
+      <tr>
+        <td class="label">Versi Dokumen</td>
+        <td>v1.0 — Proposal Implementasi &amp; Kesiapan Produksi</td>
+      </tr>
+      <tr>
+        <td class="label">Tanggal Dokumen</td>
+        <td>19 November 2026</td>
+      </tr>
+      <tr>
+        <td class="label">Teknologi Inti</td>
+        <td>Next.js 16.4 (App Router), React 19, TypeScript, Tailwind CSS v4, Prisma ORM, PostgreSQL (Supabase)</td>
+      </tr>
+      <tr>
+        <td class="label">Disusun Oleh</td>
+        <td>Tim Pengembang Web &amp; Sistem E-Commerce urban.kamen</td>
+      </tr>
+      <tr>
+        <td class="label">Ditujukan Untuk</td>
+        <td>Manajemen / Pemilik Brand <strong>urban.kamen</strong></td>
+      </tr>
+    </table>
+
+    <p style="margin-top: 32pt; font-size: 9.5pt; color: #737373; text-align: center;">
+      &copy; 2026 urban.kamen — Dokumen Proposal Resmi Pengembangan Platform Digital
+    </p>
+  </div>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== BAB I: PENDAHULUAN ==================== -->
+  <h1 class="chapter">BAB I. PENDAHULUAN</h1>
+
+  <h2 class="section">1.1 Latar Belakang</h2>
+  <p>
+    Perkembangan industri ritel pakaian (<em>streetwear &amp; daily essentials</em>) menuntut pelaku merek lokal untuk memiliki kanal penjualan digital mandiri di samping kehadiran di media sosial maupun <em>marketplace</em> pihak ketiga. Ketergantungan penuh pada <em>marketplace</em> sering kali membatasi kebebasan membangun identitas merek (<em>branding</em>), menekan margin melalui potongan biaya administrasi, serta membatasi pengelolaan data pelanggan secara langsung.
+  </p>
+  <p>
+    Untuk menjawab kebutuhan tersebut, dikembangkan platform web e-commerce resmi <strong>urban.kamen</strong>. Platform ini dirancang khusus untuk menghadirkan identitas visual editorial yang bersih dan minimalis (<em>Fresh &amp; Clean Minimalist</em>), alur belanja cepat dari perangkat seluler maupun desktop, pengelolaan stok per ukuran secara akurat, buku alamat ganda (<em>multi-address</em>) yang terhubung ke halaman checkout, serta panel kendali admin terpusat.
+  </p>
+
+  <h2 class="section">1.2 Rumusan Masalah</h2>
+  <ol>
+    <li>Bagaimana menghadirkan toko daring resmi yang mencerminkan karakter merek <strong>urban.kamen</strong> secara eksklusif, cepat diakses di ponsel (<em>mobile-friendly</em>), dan bebas dari gangguan visual yang berlebihan?</li>
+    <li>Bagaimana mempermudah pelanggan memilih produk berdasarkan kategori, koleksi, dan ketersediaan ukuran (<span class="code-badge">S/M/L/XL</span>), serta menyimpan beberapa alamat pengiriman untuk proses checkout yang praktis?</li>
+    <li>Bagaimana menyediakan infrastruktur checkout yang siap diintegrasikan dengan berbagai metode pembayaran digital Indonesia serta layanan ekspedisi jarak dekat hingga antar-pulau?</li>
+    <li>Bagaimana memberikan kemudahan bagi pemilik toko untuk mengelola produk multi-foto, banner promosi, dan pembaruan resi pesanan melalui satu dashboard?</li>
+  </ol>
+
+  <h2 class="section">1.3 Tujuan Pengembangan</h2>
+  <ul>
+    <li>Membangun situs web e-commerce mandiri berkecepatan tinggi berbasis arsitektur modern (<span class="code-badge">Next.js 16 App Router</span> &amp; <span class="code-badge">PostgreSQL Supabase</span>).</li>
+    <li>Menyediakan pengalaman belanja yang nyaman di layar ponsel dengan tata letak 2-grid katalog, navigasi langsung terlihat, serta keranjang geser (<em>Slide-Over Cart Drawer</em>).</li>
+    <li>Menerapkan sistem akun pelanggan terintegrasi (Email + Google OAuth), riwayat pesanan, serta fitur <em>Multi-Address Book</em> (hingga 5 alamat tersimpan dengan penanda alamat utama).</li>
+    <li>Menyediakan fondasi kode yang terstruktur rapi untuk integrasi <em>Payment Gateway</em> (Midtrans Snap) dan API Ongkos Kirim (seperti Biteship / RajaOngkir) serta siap di-deploy ke VPS produksi.</li>
+  </ul>
+
+  <h2 class="section">1.4 Manfaat Sistem</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 28%;">Pihak Terkait</th>
+        <th>Manfaat Implementasi Platform urban.kamen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Pemilik Brand / Manajemen</strong></td>
+        <td>
+          Memiliki aset toko digital resmi tanpa potongan komisi marketplace; memiliki basis data pelanggan dan riwayat pesanan sendiri; kontrol penuh terhadap banner kampanye, rilis <em>New Drop</em>, harga diskon, dan stok per varian ukuran.
+        </td>
+      </tr>
+      <tr class="alt">
+        <td><strong>Pelanggan (Customer)</strong></td>
+        <td>
+          Kemudahan menelusuri katalog dan detail produk di HP maupun desktop; login cepat via Email atau Google; penyimpanan hingga 5 alamat kirim; perhitungan ongkir transparan termasuk promo gratis ongkir reguler minimal Rp 500.000; serta pelacakan status pengiriman &amp; nomor resi secara langsung.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== BAB II: RUANG LINGKUP & FITUR SISTEM ==================== -->
+  <h1 class="chapter">BAB II. RUANG LINGKUP &amp; FITUR SISTEM</h1>
+
+  <h2 class="section">2.1 Modul Storefront &amp; Pengalaman Belanja Pelanggan</h2>
+  <p>
+    Antarmuka pelanggan disusun agar pengunjung dapat langsung memahami koleksi utama dan melakukan pembelian dengan jumlah klik seminimal mungkin:
+  </p>
+  <ul>
+    <li><strong>Navigasi Responsif (<span class="code-badge">Navbar</span>):</strong> Header lengket (<em>sticky</em>) dengan logo merek <span class="code-badge">urban.kamen</span>, akses cepat menu akun/login, tombol keranjang (<span class="code-badge">Bag [00]</span>), serta bilah navigasi mobile khusus yang langsung terlihat tanpa tersembunyi di balik ikon menu.</li>
+    <li><strong>Hero Banner Carousel Dinamis (<span class="code-badge">/catalog</span>):</strong> Tampilan editorial berukuran proporsional (<span class="code-badge">460px</span> di desktop) yang berganti slide otomatis setiap 4 detik dan dapat dikendalikan manual, terhubung langsung ke data banner di database admin.</li>
+    <li><strong>Filter Kategori &amp; Pencarian Real-Time:</strong> Mendukung penyaringan kategori (<span class="code-badge">All</span>, <span class="code-badge">Outerwear</span>, <span class="code-badge">T-Shirts</span>, <span class="code-badge">Jackets</span>, <span class="code-badge">Shirts</span>, <span class="code-badge">Denim</span>) serta pencarian berdasarkan nama atau kategori dengan tombol reset cepat.</li>
+    <li><strong>Kartu Produk Terpadu (<span class="code-badge">&lt;ProductCard /&gt;</span>):</strong> Tata letak 2 kolom di HP (<span class="code-badge">grid-cols-2</span>) dan 3–4 kolom di desktop dengan rasio foto <span class="code-badge">4:5</span>, badge diskon &amp; <em>NEW</em>, indikator <em>Sold Out</em> otomatis, informasi ukuran tersedia, dan tombol <em>Quick Add</em>.</li>
+    <li><strong>Halaman Khusus Rilis &amp; Kurasi:</strong> Halaman <span class="code-badge">/new-drop</span> untuk produk rilisan terbaru (disertai indikator sisa stok), <span class="code-badge">/collections</span> untuk pengelompokan seri koleksi, serta <span class="code-badge">/about</span> untuk profil kualitas bahan merek.</li>
+    <li><strong>Detail Produk &amp; Ulasan (<span class="code-badge">/product/[id]</span>):</strong> Galeri multi-foto lengkap dengan tombol panah kiri/kanan, penghitung foto, strip thumbnail, rincian konstruksi bahan, pemilihan ukuran dengan stok per size, pemilih kuantitas, serta sistem ulasan khusus pembeli terverifikasi (<em>Verified Buyer</em>).</li>
+    <li><strong>Slide-Over Cart Drawer:</strong> Panel keranjang yang muncul dari sisi kanan (lebar penuh pada HP) dengan indikator progres menuju <strong>Gratis Ongkir (minimal Rp 500.000)</strong>, pengubah kuantitas, hapus item, dan tombol langsung ke Checkout.</li>
+  </ul>
+
+  <h2 class="section">2.2 Modul Autentikasi &amp; Akun Pelanggan</h2>
+  <ul>
+    <li><strong>Registrasi &amp; Login Terintegrasi (<span class="code-badge">/login</span> &amp; <span class="code-badge">/register</span>):</strong> Mendukung autentikasi Email/Password dengan hashing aman (<span class="code-badge">Argon2</span>) serta tombol <strong>Continue with Google</strong> (Google OAuth 2.0 melalui Supabase Auth).</li>
+    <li><strong>Manajemen Sesi &amp; Pengalihan Cerdas:</strong> Sesi disimpan pada <em>HTTP-Only Cookie</em> bertanda tangan JWT (<span class="code-badge">session_token</span>) dengan dukungan parameter <span class="code-badge">?next=</span> sehingga pengguna otomatis kembali ke halaman tujuan (misal Checkout atau Ulasan) setelah login.</li>
+    <li><strong>Profil &amp; Riwayat Pesanan (<span class="code-badge">/account/profile</span> &amp; <span class="code-badge">/account/orders</span>):</strong> Pelanggan dapat memperbarui nama, nomor telepon, kata sandi, serta memantau detail pesanan dan status pengiriman (<span class="code-badge">DIPROSES</span>, <span class="code-badge">DIKIRIM</span>, <span class="code-badge">DALAM_PERJALANAN</span>, <span class="code-badge">SELESAI</span>) beserta nomor resi.</li>
+    <li><strong>Buku Alamat Multi-Address (<span class="code-badge">/account/addresses</span>):</strong> Fitur manajemen alamat bergaya Shopee yang memungkinkan pelanggan menyimpan hingga <strong>5 alamat pengiriman</strong> per akun dengan label (<span class="code-badge">Rumah</span>, <span class="code-badge">Kantor</span>, <span class="code-badge">Kos / Apartemen</span>, <span class="code-badge">Lainnya</span>), detail provinsi/kota/kecamatan/kode pos, serta tombol satu-klik untuk menetapkan <strong>Alamat Utama (<span class="code-badge">isPrimary</span>)</strong>.</li>
+  </ul>
+
+  <h2 class="section">2.3 Modul Checkout, Pengiriman &amp; Pembayaran</h2>
+  <ul>
+    <li><strong>Pemilih Alamat Terhubung di Checkout (<span class="code-badge">/checkout</span>):</strong> Secara otomatis menampilkan Alamat Utama pelanggan saat checkout, serta menyediakan modal pemilihan atau penambahan alamat baru tanpa meninggalkan halaman checkout.</li>
+    <li><strong>Kalkulasi Ongkos Kirim Berbasis Zona &amp; Siap API (<span class="code-badge">/api/checkout/quote</span>):</strong> Saat ini menghitung estimasi berat (<span class="code-badge">400 gram/pcs</span>) dan zona tujuan (Jabodetabek, Jawa, Sumatera-Bali, Kalimantan-Sulawesi, Indonesia Timur) untuk kurir JNE (<span class="code-badge">REG</span>, <span class="code-badge">YES</span>), J&amp;T Express (<span class="code-badge">EZ</span>), dan SiCepat (<span class="code-badge">REG</span>), termasuk promo gratis ongkir reguler untuk subtotal &ge; Rp 500.000. Arsitektur provider pengiriman dipisah pada layer <span class="code-badge">lib/shipping/</span> sehingga mudah disambungkan ke API ekspedisi live (seperti Biteship atau RajaOngkir) termasuk layanan <em>Same-Day / Instant</em>.</li>
+    <li><strong>Kesiapan Kanal Pembayaran (<span class="code-badge">lib/payment/methods.ts</span>):</strong> Telah memodelkan saluran pembayaran <strong>QRIS</strong> (GoPay, OVO, DANA, ShopeePay, Mobile Banking), <strong>Virtual Account</strong> (BCA, Mandiri, BNI, BRI, Permata), <strong>E-Wallet</strong>, dan <strong>Kartu Kredit/Debit</strong> yang siap diaktifkan dengan Midtrans Snap pada fase go-live produksi.</li>
+  </ul>
+
+  <h2 class="section">2.4 Modul Dashboard Admin (<span class="code-badge">/admin</span>)</h2>
+  <p>
+    Halaman admin dilindungi oleh verifikasi peran (<span class="code-badge">Role.ADMIN</span>) di level middleware/proxy dan API server:
+  </p>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 26%;">Sub-Modul Admin</th>
+        <th>Fungsi &amp; Kemampuan Operasional</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Ringkasan &amp; Statistik</strong><br /><span class="code-badge">/admin</span></td>
+        <td>Menampilkan ringkasan pendapatan, total pesanan masuk, jumlah produk aktif, dan metrik operasional toko melalui API <span class="code-badge">/api/admin/stats</span>.</td>
+      </tr>
+      <tr class="alt">
+        <td><strong>Manajemen Produk</strong><br /><span class="code-badge">/admin/products</span></td>
+        <td>Tambah produk baru (<span class="code-badge">/new</span>) dan edit produk (<span class="code-badge">/[id]/edit</span>), unggah banyak foto ke Supabase Storage (<span class="code-badge">/api/admin/upload</span>), atur harga coret, badge diskon, flag <em>New Drop</em>, kategori, koleksi, spesifikasi konstruksi, serta stok terpisah per ukuran.</td>
+      </tr>
+      <tr>
+        <td><strong>Manajemen Banner</strong><br /><span class="code-badge">/admin/banners</span></td>
+        <td>Mengelola daftar banner hero di halaman katalog (judul, subjudul/tag, deskripsi, gambar kampanye, serta status aktif/nonaktif).</td>
+      </tr>
+      <tr class="alt">
+        <td><strong>Manajemen Pesanan</strong><br /><span class="code-badge">/admin/orders</span></td>
+        <td>Memantau pesanan pelanggan masuk, memperbarui status pengiriman (<span class="code-badge">DIPROSES</span> &rarr; <span class="code-badge">DIKIRIM</span> &rarr; <span class="code-badge">DALAM_PERJALANAN</span> &rarr; <span class="code-badge">SELESAI</span>), dan menginput nomor resi pengiriman.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== BAB III: DESAIN VISUAL & ARSITEKTUR TEKNOLOGI ==================== -->
+  <h1 class="chapter">BAB III. DESAIN VISUAL &amp; ARSITEKTUR TEKNOLOGI</h1>
+
+  <h2 class="section">3.1 Konsep Desain Antarmuka (UI/UX)</h2>
+  <p>
+    Antarmuka <strong>urban.kamen</strong> mengusung pendekatan <strong>Fresh &amp; Clean Minimalist</strong> yang menonjolkan fotografi produk pakaian tanpa distorsi visual:
+  </p>
+  <ul>
+    <li><strong>Palet Warna Konsisten:</strong> Dominasi latar putih bersih (<span class="code-badge">#FFFFFF</span>), permukaan abu lembut (<span class="code-badge">neutral-50</span> hingga <span class="code-badge">neutral-200</span>), aksen primer tegas (<span class="code-badge">neutral-950</span>), dan aksen interaksi segar (<span class="code-badge">emerald-600/700</span>).</li>
+    <li><strong>Tipografi Terstandarisasi (<span class="code-badge">next/font/google</span>):</strong> Memuat font <strong>Montserrat</strong> untuk judul dan identitas merek, <strong>Inter</strong> untuk teks antarmuka dan keterbacaan paragraf, serta <strong>JetBrains Mono</strong> (<span class="code-badge">tabular-nums</span>) untuk harga Rupiah, badge ukuran, nomor resi, dan penghitung stok.</li>
+    <li><strong>Kenyamanan Perangkat Seluler:</strong> Scrollbar horizontal disembunyikan secara rapi (<span class="code-badge">.no-scrollbar</span>) pada bilah filter dan strip thumbnail agar tampilan mobile tetap bersih, dengan tata letak 2 kolom katalog di layar kecil dan transisi halaman halus menggunakan <span class="code-badge">Framer Motion</span>.</li>
+  </ul>
+
+  <h2 class="section">3.2 Spesifikasi Teknologi (Tech Stack)</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 24%;">Lapisan Sistem</th>
+        <th style="width: 30%;">Teknologi / Library</th>
+        <th>Peran dalam Platform</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Framework &amp; Bahasa</strong></td>
+        <td>Next.js 16.4.2 (App Router, Turbopack), React 19.3, TypeScript 5</td>
+        <td>Rendering hibrida antarmuka storefront, dashboard admin, serta RESTful API Route Handlers dalam satu proyek terpadu.</td>
+      </tr>
+      <tr class="alt">
+        <td><strong>Styling &amp; Animasi</strong></td>
+        <td>Tailwind CSS v4, Framer Motion 14, Google Fonts</td>
+        <td>Desain responsif <em>mobile-first</em>, token tema terpusat, animasi transisi halaman &amp; drawer yang ringan.</td>
+      </tr>
+      <tr>
+        <td><strong>ORM &amp; Database</strong></td>
+        <td>Prisma ORM v5.22, PostgreSQL (Supabase)</td>
+        <td>Pemodelan data relasional berkeamanan tipe (<em>type-safe</em>) dengan dukungan koneksi pooling (<span class="code-badge">DATABASE_URL</span> &amp; <span class="code-badge">DIRECT_URL</span>).</td>
+      </tr>
+      <tr class="alt">
+        <td><strong>Autentikasi &amp; Media</strong></td>
+        <td>Supabase (<span class="code-badge">@supabase/supabase-js</span>), Argon2, JWT</td>
+        <td>OAuth Login Google, penyimpanan file gambar produk &amp; banner di Cloud Storage, hashing password kuat, dan verifikasi sesi JWT.</td>
+      </tr>
+      <tr>
+        <td><strong>Keamanan Aplikasi</strong></td>
+        <td><span class="code-badge">proxy.ts</span> (Request Guard)</td>
+        <td>Proteksi CSRF Origin-Check pada mutasi API (<span class="code-badge">POST/PUT/PATCH/DELETE</span>), otorisasi rute <span class="code-badge">/admin</span> &amp; <span class="code-badge">/account</span>, serta security HTTP headers.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="section">3.3 Arsitektur Skema Database</h2>
+  <p>
+    Skema basis data pada <span class="code-badge">prisma/schema.prisma</span> mencakup 9 model relasional inti:
+  </p>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 22%;">Model Tabel</th>
+        <th>Deskripsi Entitas &amp; Relasi Utama</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="code-badge">User</span></td>
+        <td>Data akun pengguna (<span class="code-badge">id</span>, <span class="code-badge">name</span>, <span class="code-badge">email</span>, <span class="code-badge">phone</span>, <span class="code-badge">passwordHash</span>, <span class="code-badge">role: CUSTOMER | ADMIN</span>). Berelasi ke <span class="code-badge">Order[]</span> dan <span class="code-badge">Address[]</span>.</td>
+      </tr>
+      <tr class="alt">
+        <td><span class="code-badge">Address</span></td>
+        <td>Menyimpan hingga 5 buku alamat per pengguna (<span class="code-badge">label</span>, <span class="code-badge">recipientName</span>, <span class="code-badge">phone</span>, <span class="code-badge">province</span>, <span class="code-badge">city</span>, <span class="code-badge">district</span>, <span class="code-badge">postalCode</span>, <span class="code-badge">fullAddress</span>, <span class="code-badge">notes</span>, <span class="code-badge">isPrimary</span>).</td>
+      </tr>
+      <tr>
+        <td><span class="code-badge">Product</span></td>
+        <td>Katalog item (<span class="code-badge">name</span>, <span class="code-badge">description</span>, <span class="code-badge">price</span>, <span class="code-badge">oldPrice</span>, <span class="code-badge">discount</span>, <span class="code-badge">stock</span>, <span class="code-badge">category</span>, <span class="code-badge">collection</span>, <span class="code-badge">specs[]</span>, <span class="code-badge">isNewDrop</span>).</td>
+      </tr>
+      <tr class="alt">
+        <td><span class="code-badge">ProductImage</span></td>
+        <td>Galeri multi-foto terurut (<span class="code-badge">url</span>, <span class="code-badge">order</span>) per produk dengan penghapusan berjenjang (<em>cascade</em>).</td>
+      </tr>
+      <tr>
+        <td><span class="code-badge">ProductSize</span></td>
+        <td>Pelacakan stok independen untuk setiap varian ukuran (<span class="code-badge">size</span>, <span class="code-badge">stock</span>) pada masing-masing produk.</td>
+      </tr>
+      <tr class="alt">
+        <td><span class="code-badge">Banner</span></td>
+        <td>Konten kampanye hero carousel pada toko (<span class="code-badge">tag</span>, <span class="code-badge">title</span>, <span class="code-badge">description</span>, <span class="code-badge">imageUrl</span>, <span class="code-badge">isActive</span>).</td>
+      </tr>
+      <tr>
+        <td><span class="code-badge">Order</span></td>
+        <td>Catatan transaksi pesanan (<span class="code-badge">totalAmount</span>, <span class="code-badge">shippingAddress</span>, <span class="code-badge">trackingNumber</span>, <span class="code-badge">shippingStatus</span>).</td>
+      </tr>
+      <tr class="alt">
+        <td><span class="code-badge">OrderItem</span></td>
+        <td>Rincian item, kuantitas, dan harga satuan saat transaksi dilakukan pada setiap pesanan.</td>
+      </tr>
+      <tr>
+        <td><span class="code-badge">Payment</span></td>
+        <td>Rekaman transaksi pembayaran (<span class="code-badge">provider</span>, <span class="code-badge">transactionToken</span>, <span class="code-badge">externalRefId</span>, <span class="code-badge">amount</span>, <span class="code-badge">status: PENDING | SUCCESS | FAILED</span>, <span class="code-badge">paidAt</span>).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== BAB IV: RENCANA DEPLOYMENT VPS, TIMELINE & ESTIMASI BIAYA ==================== -->
+  <h1 class="chapter">BAB IV. RENCANA DEPLOYMENT VPS, TIMELINE &amp; ESTIMASI BIAYA</h1>
+
+  <h2 class="section">4.1 Arsitektur Deployment Produksi di VPS</h2>
+  <p>
+    Karena basis data PostgreSQL dan penyimpanan media sudah dikelola di cloud (Supabase), server VPS difokuskan untuk menjalankan runtime aplikasi web Next.js secara stabil dan aman:
+  </p>
+  <ol>
+    <li><strong>Penyelesaian Pra-Build Produksi:</strong> Memastikan komponen prerender seperti <span class="code-badge">Footer.tsx</span> dan handler <span class="code-badge">/api/products</span> kompatibel penuh dengan konfigurasi <span class="code-badge">cacheComponents</span> Next.js 16 agar proses <span class="code-badge">npm run build</span> berjalan tanpa error.</li>
+    <li><strong>Lingkungan Server VPS:</strong> Sistem operasi Ubuntu 22.04/24.04 LTS (minimal <strong>2 GB RAM</strong> atau 4 GB RAM direkomendasikan) berlokasi di region <strong>Singapore / Jakarta</strong> untuk latensi rendah dengan Node.js 22 LTS dan pengelola proses <strong>PM2</strong> (atau platform panel otomatis seperti <strong>Dokploy / Coolify</strong>).</li>
+    <li><strong>Reverse Proxy &amp; Enkripsi SSL (HTTPS):</strong> Konfigurasi <strong>Nginx</strong> meneruskan trafik domain ke port aplikasi (<span class="code-badge">127.0.0.1:3000</span>) disertai header <span class="code-badge">Host</span> &amp; <span class="code-badge">X-Forwarded-Proto</span> dan sertifikat SSL gratis Let&rsquo;s Encrypt (<em>Certbot</em>). HTTPS merupakan syarat mutlak agar cookie login (<span class="code-badge">secure</span>) dan callback Google OAuth berfungsi normal di produksi.</li>
+    <li><strong>Sinkronisasi Skema &amp; Variabel Lingkungan:</strong> Menjalankan <span class="code-badge">npx prisma generate</span> sebelum build, serta menyetel redirect URL produksi (<span class="code-badge">https://domain-toko.com/auth/callback</span>) di Supabase Dashboard.</li>
+  </ol>
+
+  <h2 class="section">4.2 Timeline Tahapan Pengembangan &amp; Go-Live</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 14%;">Fase</th>
+        <th style="width: 30%;">Kegiatan Utama</th>
+        <th style="width: 38%;">Keluaran (Deliverable)</th>
+        <th style="width: 18%;">Status / Durasi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Fase 1</strong></td>
+        <td>Fondasi Database, Auth &amp; Admin CRUD</td>
+        <td>Skema Prisma PostgreSQL, autentikasi JWT + Google OAuth, dashboard admin produk, banner, dan pesanan.</td>
+        <td>Selesai</td>
+      </tr>
+      <tr class="alt">
+        <td><strong>Fase 2</strong></td>
+        <td>Storefront, Keranjang &amp; Checkout</td>
+        <td>Katalog, New Drop, Collections, Detail Produk, Cart Drawer, alur Checkout &amp; kalkulasi ongkir dasar.</td>
+        <td>Selesai</td>
+      </tr>
+      <tr>
+        <td><strong>Fase 3</strong></td>
+        <td>Multi-Address &amp; Mobile-First UI Upgrade</td>
+        <td>Buku alamat hingga 5 alamat, mobile 2-grid, Google Fonts asli, penyatuan <span class="code-badge">&lt;ProductCard /&gt;</span>, penyelarasan Auth UI.</td>
+        <td>Selesai</td>
+      </tr>
+      <tr class="alt">
+        <td><strong>Fase 4</strong></td>
+        <td>Finalisasi Build &amp; Deployment VPS</td>
+        <td>Perbaikan prerender Next.js 16, setup VPS + Domain + SSL HTTPS, deploy produksi &amp; uji fungsional akhir.</td>
+        <td>Estimasi 2–3 Hari</td>
+      </tr>
+      <tr>
+        <td><strong>Fase 5</strong></td>
+        <td>Aktivasi Payment &amp; Kurir Live API (Opsional Lanjutan)</td>
+        <td>Aktivasi Midtrans Snap (QRIS/VA/E-Wallet) &amp; integrasi API ongkir live (Biteship / RajaOngkir) untuk reguler &amp; sameday.</td>
+        <td>Estimasi 3–5 Hari</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="section">4.3 Estimasi Biaya Operasional Infrastruktur</h2>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 28%;">Komponen Layanan</th>
+        <th style="width: 36%;">Spesifikasi / Contoh Penyedia</th>
+        <th style="width: 20%;">Estimasi Biaya</th>
+        <th style="width: 16%;">Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Cloud VPS Server</strong></td>
+        <td>Hostinger KVM 1 (4 GB RAM) / Biznet Gio NEO Lite (2 GB RAM) / Hetzner SGP</td>
+        <td>Rp 70.000 – Rp 120.000 / bulan</td>
+        <td>Server aplikasi web Next.js + Nginx</td>
+      </tr>
+      <tr class="alt">
+        <td><strong>Nama Domain (.com / .id)</strong></td>
+        <td>Contoh: <span class="code-badge">urbankamen.com</span> atau <span class="code-badge">.id</span></td>
+        <td>Rp 180.000 – Rp 250.000 / tahun</td>
+        <td>Identitas domain resmi toko</td>
+      </tr>
+      <tr>
+        <td><strong>Database &amp; Storage</strong></td>
+        <td>Supabase (PostgreSQL + Storage + OAuth) — Free / Pro Tier</td>
+        <td>Rp 0 (Free Tier) – $25 / bulan (Pro)</td>
+        <td>Sesuai pertumbuhan trafik &amp; media</td>
+      </tr>
+      <tr class="alt">
+        <td><strong>SSL Certificate (HTTPS)</strong></td>
+        <td>Let&rsquo;s Encrypt / Certbot (Auto-Renew)</td>
+        <td>Rp 0 (Gratis)</td>
+        <td>Wajib untuk keamanan &amp; cookie login</td>
+      </tr>
+      <tr>
+        <td><strong>API Pembayaran &amp; Ongkir</strong></td>
+        <td>Midtrans (per transaksi sukses) &amp; Biteship/RajaOngkir</td>
+        <td>Sesuai tarif MDR / kuota transaksi</td>
+        <td>Dibayar berbasis pemakaian aktual</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== BAB V: PENUTUP ==================== -->
+  <h1 class="chapter">BAB V. PENUTUP &amp; LEMBAR PERSETUJUAN</h1>
+
+  <p>
+    Platform e-commerce <strong>urban.kamen</strong> telah dirancang dan dibangun dengan fondasi teknologi web modern, tampilan antarmuka yang bersih dan minimalis, kesiapan pengelolaan katalog per ukuran, fitur buku alamat terhubung ke checkout, serta perlindungan keamanan berlapis. Dengan dukungan infrastruktur VPS yang tepat dan konfigurasi HTTPS yang benar, sistem siap beroperasi secara komersial untuk melayani pelanggan di seluruh Indonesia maupun menjadi fondasi pengembangan fitur lanjutan seperti pembayaran otomatis dan pengiriman sameday/instan.
+  </p>
+  <p>
+    Demikian proposal pengembangan dan implementasi platform web e-commerce <strong>urban.kamen</strong> ini disusun sebagai acuan resmi pelaksanaan tahap finalisasi produksi dan operasionalisasi sistem.
+  </p>
+
+  <table class="sign-table">
+    <tr>
+      <td>
+        Diajukan Oleh,<br />
+        <strong>Tim Pengembang Sistem</strong>
+        <br /><br /><br /><br />
+        <u>______________________________</u><br />
+        <em>Lead Developer / System Architect</em>
+      </td>
+      <td>
+        Disetujui Oleh,<br />
+        <strong>Manajemen / Pemilik Brand urban.kamen</strong>
+        <br /><br /><br /><br />
+        <u>______________________________</u><br />
+        <em>Owner / Project Sponsor</em>
+      </td>
+    </tr>
+  </table>
+
+</div>
+</body>
+</html>

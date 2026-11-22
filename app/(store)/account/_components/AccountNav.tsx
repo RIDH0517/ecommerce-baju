@@ -45,7 +45,7 @@ export default function AccountNav({ title }: { title: string }) {
         </button>
       </div>
 
-      <nav aria-label="Navigasi Akun" className="mt-6 flex items-center gap-6">
+      <nav aria-label="Navigasi Akun" className="mt-6 flex items-center gap-6 overflow-x-auto whitespace-nowrap no-scrollbar">
         {tabs.map((tab) => (
           <Link
             key={tab.href}

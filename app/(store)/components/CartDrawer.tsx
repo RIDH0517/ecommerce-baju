@@ -60,15 +60,15 @@ export default function CartDrawer() {
       />
 
       {/* SLIDE-OVER DRAWER PANEL */}
-      <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
+      <div className="fixed inset-y-0 right-0 flex max-w-full pl-0 sm:pl-10">
         <div
-          className={`w-screen max-w-[440px] bg-white text-neutral-950 shadow-[0_0_60px_-15px_rgba(0,0,0,0.25)] border-l border-neutral-200/80 flex flex-col justify-between transform transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          className={`w-screen sm:max-w-[440px] bg-white text-neutral-950 shadow-[0_0_60px_-15px_rgba(0,0,0,0.25)] border-l border-neutral-200/80 flex flex-col justify-between transform transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
             isCartOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
           {/* 1. HEADER EDITORIAL */}
           <div className="border-b border-neutral-200/80">
-            <div className="px-6 py-5 flex items-center justify-between">
+            <div className="px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between">
               <div className="flex items-baseline space-x-2.5">
                 <h2 className="text-xs font-black uppercase tracking-[0.2em] text-neutral-950 font-[Montserrat,sans-serif]">
                   Shopping Bag
@@ -97,7 +97,7 @@ export default function CartDrawer() {
             </div>
 
             {/* BAR INDIKATOR GRATIS ONGKIR */}
-            <div className="bg-neutral-50 px-6 py-3 border-t border-neutral-100">
+            <div className="bg-neutral-50 px-4 sm:px-6 py-3 border-t border-neutral-100">
               <div className="flex justify-between items-center text-[11px] mb-2">
                 {remainingForFreeShipping > 0 ? (
                   <p className="text-neutral-600">
@@ -122,7 +122,7 @@ export default function CartDrawer() {
           </div>
 
           {/* 2. DAFTAR ITEM KERANJANG */}
-          <div className="flex-1 overflow-y-auto px-6 divide-y divide-neutral-200/70">
+          <div className="flex-1 overflow-y-auto px-4 sm:px-6 divide-y divide-neutral-200/70">
             {cart.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-16">
                 <svg
@@ -228,7 +228,7 @@ export default function CartDrawer() {
 
           {/* 3. FOOTER CHECKOUT */}
           {cart.length > 0 && (
-            <div className="border-t border-neutral-200 bg-white p-6 space-y-5">
+            <div className="border-t border-neutral-200 bg-white p-4 sm:p-6 space-y-5">
               <div className="space-y-2">
                 <div className="flex justify-between text-xs text-neutral-500">
                   <span>Pengiriman</span>
