@@ -1,0 +1,965 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="ProgId" content="Word.Document" />
+<meta name="Generator" content="Microsoft Word 15" />
+<title>Proposal Penawaran Website E-Commerce Fashion - urban.kamen</title>
+<!--[if gte mso 9]>
+<xml>
+  <w:WordDocument>
+    <w:View>Print</w:View>
+    <w:Zoom>100</w:Zoom>
+    <w:DoNotOptimizeForBrowser/>
+  </w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+  @page Section1 {
+    size: 595.3pt 841.9pt;
+    margin: 2.0cm 2.2cm 2.0cm 2.2cm;
+    mso-header-margin: 1.0cm;
+    mso-footer-margin: 1.0cm;
+    mso-paper-source: 0;
+  }
+  div.Section1 {
+    page: Section1;
+  }
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.45;
+    color: #111111;
+    background-color: #ffffff;
+  }
+  .page-break {
+    page-break-before: always;
+    clear: both;
+  }
+  /* Cover Page */
+  table.cover-box {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #eef7fd;
+    border: 1pt solid #d4e8f5;
+    font-family: Arial, Calibri, sans-serif;
+  }
+  .cover-title {
+    font-family: Arial, Calibri, sans-serif;
+    font-size: 20pt;
+    font-weight: bold;
+    line-height: 1.4;
+    text-align: center;
+    color: #0a0a0a;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .cover-brand-name {
+    font-family: Arial, Calibri, sans-serif;
+    font-size: 14pt;
+    font-weight: bold;
+    color: #0a0a0a;
+    text-align: center;
+    margin: 12pt 0 2pt 0;
+  }
+  .cover-brand-sub {
+    font-family: Arial, Calibri, sans-serif;
+    font-size: 11pt;
+    font-weight: bold;
+    color: #111111;
+    text-align: center;
+    margin: 0 0 10pt 0;
+  }
+  .cover-address {
+    font-family: Arial, Calibri, sans-serif;
+    font-size: 9.5pt;
+    color: #333333;
+    text-align: center;
+    margin: 0 0 18pt 0;
+  }
+  /* Kop Surat */
+  table.kop-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-bottom: 1.8pt solid #111111;
+    margin-bottom: 16pt;
+  }
+  table.kop-table td {
+    padding-bottom: 8pt;
+    vertical-align: middle;
+  }
+  .surat-title {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 13pt;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: underline;
+    line-height: 1.35;
+    margin: 10pt 0 18pt 0;
+  }
+  p.prose {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.45;
+    text-align: justify;
+    text-indent: 1.2cm;
+    margin-top: 0;
+    margin-bottom: 8pt;
+  }
+  p.normal {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.45;
+    margin-top: 0;
+    margin-bottom: 8pt;
+  }
+  h2.bab-heading {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12.5pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #000000;
+    margin-top: 16pt;
+    margin-bottom: 8pt;
+  }
+  ol.poin-list {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.45;
+    margin-top: 4pt;
+    margin-bottom: 10pt;
+    padding-left: 34pt;
+  }
+  ol.poin-list li {
+    margin-bottom: 3pt;
+    text-align: justify;
+  }
+  /* Tabel Harga & Komponen (Gaya Biru Lembut + Total Biru Gelap) */
+  table.proposal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8pt;
+    margin-bottom: 14pt;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 11pt;
+  }
+  table.proposal-table th {
+    background-color: #dce6f1;
+    color: #000000;
+    font-weight: bold;
+    border: 1pt solid #404040;
+    padding: 6pt 7pt;
+  }
+  table.proposal-table td {
+    border: 1pt solid #404040;
+    padding: 5.5pt 7pt;
+    vertical-align: top;
+    line-height: 1.35;
+  }
+  table.proposal-table tr.total-final td {
+    background-color: #2f5496;
+    color: #ffffff;
+    font-weight: bold;
+  }
+  /* Diagram Waterfall */
+  table.flow-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10pt;
+    margin-bottom: 8pt;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 9.5pt;
+  }
+  td.flow-box {
+    border: 1.2pt solid #1f4e79;
+    background-color: #ffffff;
+    text-align: center;
+    vertical-align: middle;
+    padding: 7pt 5pt;
+    font-weight: bold;
+    color: #111111;
+    width: 21%;
+  }
+  td.flow-arrow {
+    text-align: center;
+    vertical-align: middle;
+    font-family: Arial, sans-serif;
+    font-size: 14pt;
+    font-weight: bold;
+    color: #1f4e79;
+    padding: 2pt;
+    width: 5%;
+  }
+  td.flow-empty {
+    border: none;
+    padding: 2pt;
+  }
+  /* Gantt Schedule Table */
+  table.gantt-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6pt;
+    margin-bottom: 14pt;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 10.5pt;
+  }
+  table.gantt-table th {
+    background-color: #dce6f1;
+    color: #000000;
+    font-weight: bold;
+    border: 1pt solid #404040;
+    padding: 4.5pt 5pt;
+    text-align: center;
+  }
+  table.gantt-table td {
+    border: 1pt solid #404040;
+    padding: 4pt 6pt;
+    vertical-align: middle;
+  }
+  td.gantt-active {
+    background-color: #1f4e79;
+    color: #1f4e79;
+  }
+  /* Portofolio Table */
+  table.porto-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6pt;
+    margin-bottom: 14pt;
+    font-family: Arial, Calibri, sans-serif;
+    font-size: 10pt;
+  }
+  table.porto-table th {
+    background-color: #2f5496;
+    color: #ffffff;
+    font-weight: bold;
+    border: 1pt solid #404040;
+    padding: 6pt 7pt;
+  }
+  table.porto-table td {
+    border: 1pt solid #404040;
+    padding: 5pt 7pt;
+    vertical-align: top;
+  }
+  /* Signature */
+  table.ttd-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14pt;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 11.5pt;
+  }
+  table.ttd-table td {
+    border: none;
+    vertical-align: top;
+    padding: 2pt;
+  }
+</style>
+</head>
+<body>
+<div class="Section1">
+
+  <!-- ==================== HALAMAN 1: SAMPUL (COVER PAGE) ==================== -->
+  <table class="cover-box">
+    <tr>
+      <td style="padding: 16pt 22pt 0 22pt;">
+        <!-- Aksen Geometris Kanan Atas -->
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="width: 72%;">&nbsp;</td>
+            <td style="width: 7%; height: 18pt; background-color: #bae6fd;">&nbsp;</td>
+            <td style="width: 7%; height: 18pt; background-color: #38bdf8;">&nbsp;</td>
+            <td style="width: 7%; height: 18pt; background-color: #0284c7;">&nbsp;</td>
+            <td style="width: 7%; height: 18pt; background-color: #0369a1;">&nbsp;</td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td style="height: 18pt; background-color: #7dd3fc;">&nbsp;</td>
+            <td style="height: 18pt; background-color: #0ea5e9;">&nbsp;</td>
+            <td style="height: 18pt; background-color: #0284c7;">&nbsp;</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 95pt 28pt 80pt 28pt; text-align: center;">
+        <p class="cover-title">
+          PROPOSAL<br />
+          PENGEMBANGAN WEBSITE E-COMMERCE<br />
+          &amp; SISTEM MANAJEMEN TOKO FASHION
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10pt 28pt 28pt 28pt; text-align: center;">
+        <!-- Logo Identitas -->
+        <table style="margin: 0 auto; border-collapse: collapse;">
+          <tr>
+            <td style="background-color: #1f4e79; color: #ffffff; font-family: Arial, sans-serif; font-size: 16pt; font-weight: bold; padding: 6pt 11pt; border: 1pt solid #1f4e79;">
+              uk
+            </td>
+            <td style="font-family: Arial, sans-serif; font-size: 18pt; font-weight: bold; color: #475569; padding-left: 8pt;">
+              urban<span style="color: #059669;">.</span>kamen
+            </td>
+          </tr>
+        </table>
+
+        <p class="cover-brand-name">RIDHO SURYA</p>
+        <p class="cover-brand-sub">WEB DEVELOPMENT &amp; E-COMMERCE SOLUTIONS</p>
+        <p class="cover-address">[Isi Alamat Lengkap Anda &mdash; Kota, Provinsi]</p>
+
+        <!-- Badge Pill Emas seperti contoh PDF -->
+        <table style="margin: 0 auto; border-collapse: collapse;">
+          <tr>
+            <td style="background-color: #f59e0b; border: 1.5pt solid #d97706; color: #ffffff; font-family: Arial, sans-serif; font-size: 13pt; font-weight: bold; padding: 8pt 36pt; text-align: center;">
+              [www.domain-anda.com]
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 16pt 0 0 0;">
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="height: 14pt; background-color: #1e3a8a; color: #dbeafe; font-family: Arial, sans-serif; font-size: 8.5pt; text-align: center; padding: 5pt;">
+              E-COMMERCE UMKM FASHION &bull; STOREFRONT &bull; CHECKOUT &bull; ADMIN DASHBOARD
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== HALAMAN 2: KOP SURAT & SURAT PENAWARAN ==================== -->
+  <table class="kop-table">
+    <tr>
+      <td style="width: 48%; text-align: left;">
+        <table style="border-collapse: collapse;">
+          <tr>
+            <td style="background-color: #1f4e79; color: #ffffff; font-family: Arial, sans-serif; font-size: 15pt; font-weight: bold; padding: 6pt 10pt;">
+              uk
+            </td>
+            <td style="font-family: Arial, sans-serif; font-size: 18pt; font-weight: bold; color: #334155; padding-left: 8pt;">
+              urban<span style="color: #059669;">.</span>kamen
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td style="width: 52%; text-align: right; font-family: 'Times New Roman', Times, serif; line-height: 1.3;">
+        <div style="font-size: 11pt; font-weight: bold; color: #000000;">RIDHO SURYA</div>
+        <div style="font-size: 10pt; font-weight: bold; color: #111111;">Web Apps Development &amp; E-Commerce Solutions</div>
+        <div style="font-size: 8.5pt; font-style: italic; color: #333333;">[Isi Alamat Lengkap Anda]</div>
+        <div style="font-size: 8.5pt; font-style: italic; color: #333333;">Web: [www.domain-anda.com] WA: [08xxxxxxxxxx]</div>
+      </td>
+    </tr>
+  </table>
+
+  <p class="surat-title">
+    SURAT PENAWARAN<br />
+    PENGEMBANGAN WEBSITE E-COMMERCE
+  </p>
+
+  <p class="normal" style="margin-bottom: 12pt;">Lampiran : 1 (Satu) Berkas Dokumen Proposal</p>
+
+  <p class="normal" style="margin-bottom: 14pt;">
+    Yth. Pemilik Usaha UMKM Fashion<br />
+    <strong>Bapak Zidni</strong><br />
+    Di Tempat
+  </p>
+
+  <p class="prose">
+    Perkembangan teknologi digital sekarang ini memberikan kesempatan bagi para pengusaha untuk memperluas cakupan pemasaran melalui media online. Website e-commerce bisa menjadi cara yang membantu untuk menjual dan memesan produk dengan lebih mudah serta praktis. Bersama dengan datangnya surat ini, kami ingin memberikan penawaran untuk mengembangkan website e-commerce bagi usaha milik Bapak Zidni yang menjual pakaian. Website ini dirancang agar dapat menampilkan daftar produk, harga, diskon, serta stok per ukuran pakaian secara terperinci, dan memudahkan pelanggan membeli barang secara online. Adapun rincian harga yang kami tawarkan adalah sebagai berikut:
+  </p>
+
+  <table class="proposal-table">
+    <thead>
+      <tr>
+        <th style="width: 8%; text-align: center;">No</th>
+        <th style="width: 62%; text-align: center;">Nama Produk</th>
+        <th style="width: 30%; text-align: center;">Harga Item</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align: center;">1</td>
+        <td>Paket Website Utama E-Commerce (Storefront &amp; Katalog)</td>
+        <td style="text-align: left;">Rp. 2.500.000</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">2</td>
+        <td>Paket Sistem Belanja, Akun Pelanggan &amp; Checkout</td>
+        <td style="text-align: left;">Rp. 2.500.000</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">3</td>
+        <td>Paket Dashboard Admin &amp; Manajemen Toko</td>
+        <td style="text-align: left;">Rp. 2.000.000</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: center; font-weight: bold;">Total</td>
+        <td style="font-weight: bold;">Rp. 7.000.000</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: center; font-weight: bold;">Diskon Khusus</td>
+        <td style="font-weight: bold;">Rp. 500.000</td>
+      </tr>
+      <tr class="total-final">
+        <td colspan="2" style="text-align: center;">Total Akhir</td>
+        <td>Rp. 6.500.000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="prose">
+    Demikian penawaran yang kami ajukan, apabila terdapat informasi yang perlu diketahui mengenai penawaran tersebut, Bapak/Ibu dapat menghubungi kami melalui kontak yang tersedia. Terima kasih atas perhatian dan kerja samanya.
+  </p>
+
+  <table class="ttd-table">
+    <tr>
+      <td style="width: 55%;">&nbsp;</td>
+      <td style="width: 45%;">
+        Hormat Kami,<br />
+        Pengembang Website E-Commerce
+        <br /><br /><br /><br />
+        <strong>Ridho Surya</strong>
+      </td>
+    </tr>
+  </table>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== HALAMAN 3: 1. PENDAHULUAN & 2. TUJUAN ==================== -->
+  <h2 class="bab-heading">1. PENDAHULUAN</h2>
+
+  <p class="prose">
+    Perkembangan teknologi informasi saat ini khususnya teknologi internet sangat masif dan berkembang pesat. Dengan adanya transformasi digital, seluruh aktivitas transaksi maupun pencarian informasi produk menjadi semakin mudah diakses oleh siapa saja dan di mana saja. Pada era digital ini, pemanfaatan website toko daring tidak hanya berfungsi sebagai media katalog untuk menampilkan produk pakaian terbaru, tetapi juga memberikan citra profesional, kredibilitas merek, serta saluran penjualan mandiri bagi usaha UMKM fashion di luar ketergantungan pada marketplace pihak ketiga.
+  </p>
+
+  <p class="prose">
+    Website adalah bagian penting dari ekosistem digital yang menyajikan informasi dan layanan interaktif kepada pengunjung dalam bentuk halaman web modern. Dalam pengoperasiannya, website mengenal istilah domain dan hosting (atau VPS). Domain merupakan nama alamat resmi toko yang mudah diingat pelanggan, sedangkan VPS/hosting merupakan peladen tempat penyimpanan aplikasi, basis data produk, serta repositori foto yang diakses secara cepat dan aman oleh pengguna.
+  </p>
+
+  <p class="prose">
+    Dengan adanya website e-commerce pakaian seperti <em>urban.kamen</em>, usaha Bapak Zidni dapat menyajikan informasi lengkap berupa katalog produk berdasarkan kategori dan koleksi, galeri foto beresolusi tinggi, harga reguler maupun harga diskon, serta ketersediaan stok untuk setiap varian ukuran (S, M, L, XL). Pelanggan juga dapat berbelanja dengan nyaman selama 24 jam penuh melalui keranjang belanja, menyimpan banyak alamat pengiriman, memperoleh perhitungan ongkos kirim, serta memantau status pengiriman dan nomor resi pesanan secara mandiri.
+  </p>
+
+  <h2 class="bab-heading">2. TUJUAN</h2>
+
+  <p class="prose" style="margin-bottom: 4pt;">
+    Adapun tujuan yang dapat diperoleh dari adanya perancangan dan pengembangan website e-commerce bagi usaha fashion Bapak Zidni adalah sebagai berikut :
+  </p>
+
+  <ol class="poin-list" type="1">
+    <li>Memperluas jangkauan pemasaran dan penjualan produk pakaian ke seluruh Indonesia melalui toko online resmi.</li>
+    <li>Menampilkan katalog produk, rincian bahan, varian ukuran, harga, dan stok pakaian secara rapi, jelas, dan real-time.</li>
+    <li>Mempermudah pelanggan dalam memilih produk, menyimpan hingga 5 alamat pengiriman, menghitung ongkos kirim, dan melakukan pemesanan dari HP maupun komputer.</li>
+    <li>Mengurangi ketergantungan pada potongan biaya komisi marketplace pihak ketiga serta membangun basis data pelanggan sendiri.</li>
+    <li>Memudahkan pemilik usaha dalam mengelola produk, memperbarui banner promo, memantau statistik pesanan, dan menginput nomor resi melalui satu Dashboard Admin terpusat.</li>
+    <li>Meningkatkan kredibilitas dan kepercayaan konsumen terhadap brand UMKM fashion di mata publik.</li>
+  </ol>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== HALAMAN 4: 3. MANFAAT & 4. PROSES PELAKSANAAN ==================== -->
+  <h2 class="bab-heading">3. MANFAAT</h2>
+
+  <p class="prose" style="margin-bottom: 4pt;">
+    Manfaat yang dapat diperoleh dari perancangan dan pengembangan sebuah website e-commerce bagi usaha pakaian adalah sebagai berikut :
+  </p>
+
+  <ol class="poin-list" type="1">
+    <li>Meningkatkan citra merek &amp; profesionalisme usaha fashion di era perdagangan digital.</li>
+    <li>Meningkatkan keunggulan kompetitif karena pelanggan merasakan pengalaman belanja yang cepat, bersih, dan responsif di ponsel.</li>
+    <li>Mempercepat pengelolaan stok per ukuran dan riwayat transaksi pelanggan tanpa pencatatan manual yang rawan keliru.</li>
+    <li>Menyediakan kanal informasi rilis koleksi baru (<em>New Drop</em>) dan promo gratis ongkir yang aktif beroperasi selama 24 jam.</li>
+  </ol>
+
+  <h2 class="bab-heading">4. PROSES PELAKSANAAN</h2>
+
+  <p class="prose">
+    Berikut merupakan langkah-langkah perancangan dan pengembangan website e-commerce beserta dashboard pengelolaannya. Seperti yang ditunjukkan pada Gambar 1, seluruh proses dilaksanakan dengan model <em>waterfall</em> yang terurut dan sistematis sehingga pengerjaan website dapat berjalan terarah, teruji, dan siap beroperasi di server produksi.
+  </p>
+
+  <!-- Diagram Waterfall 3 Baris (Gaya Snake Flow seperti Contoh PDF) -->
+  <table class="flow-table">
+    <!-- Baris 1: Kiri -> Kanan -->
+    <tr>
+      <td class="flow-box">Pengumpulan<br />Data &amp; Katalog</td>
+      <td class="flow-arrow">&rarr;</td>
+      <td class="flow-box">Analisis Kebutuhan<br />&amp; Skema Database</td>
+      <td class="flow-arrow">&rarr;</td>
+      <td class="flow-box">Pemesanan Domain<br />&amp; Setup VPS</td>
+      <td class="flow-arrow">&rarr;</td>
+      <td class="flow-box">Desain UI &amp;<br />Programming</td>
+    </tr>
+    <!-- Panah turun di kanan -->
+    <tr>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-arrow" style="padding: 4pt;">&darr;</td>
+    </tr>
+    <!-- Baris 2: Kiri <- Kanan (urutan visual alur balik seperti gambar PDF) -->
+    <tr>
+      <td class="flow-box">Percobaan &amp;<br />Uji Checkout</td>
+      <td class="flow-arrow">&larr;</td>
+      <td class="flow-box">Upload Website<br />ke VPS (HTTPS)</td>
+      <td class="flow-arrow">&larr;</td>
+      <td class="flow-box">Penyempurnaan<br />Layout Mobile</td>
+      <td class="flow-arrow">&larr;</td>
+      <td class="flow-box">Pengisian Konten<br />Produk &amp; Banner</td>
+    </tr>
+    <!-- Panah turun di kiri -->
+    <tr>
+      <td class="flow-arrow" style="padding: 4pt;">&darr;</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+    </tr>
+    <!-- Baris 3: Kiri -> Kanan -->
+    <tr>
+      <td class="flow-box">Penyempurnaan<br />Akhir</td>
+      <td class="flow-arrow">&rarr;</td>
+      <td class="flow-box">Serah Terima &amp;<br />Maintenance</td>
+      <td class="flow-arrow">&rarr;</td>
+      <td class="flow-box" style="background-color: #eef7fd;">Selesai &amp;<br />Siap Jualan</td>
+      <td class="flow-empty">&nbsp;</td>
+      <td class="flow-empty">&nbsp;</td>
+    </tr>
+  </table>
+
+  <p style="text-align: center; font-size: 11pt; margin-top: 6pt;">
+    Gambar 1. Proses Pelaksanaan Perancangan &amp; Pengembangan Website E-Commerce
+  </p>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== HALAMAN 5: 5. JADWAL ==================== -->
+  <h2 class="bab-heading">5. JADWAL</h2>
+
+  <p class="prose">
+    Pengerjaan website utama toko (Storefront E-Commerce) diselesaikan dalam waktu maksimal 10 hari kalender setelah kesepakatan ditandatangani, dengan asumsi tidak ada keterlambatan pengumpulan data foto/harga produk maupun keadaan kahar (<em>force majeure</em>) dan tidak termasuk waktu aktivasi domain. Sedangkan pengembangan keseluruhan sistem belanja, checkout, multi-address, dan dashboard admin dilaksanakan dalam waktu maksimal 20 hari kerja. Berikut merupakan jadwal pelaksanaan perancangan dan pengembangan website e-commerce fashion.
+  </p>
+
+  <p style="text-align: center; font-weight: bold; font-size: 11.5pt; margin-top: 8pt; margin-bottom: 4pt;">
+    Jadwal Pengembangan Website E-Commerce Fashion
+  </p>
+
+  <table class="gantt-table">
+    <thead>
+      <tr>
+        <th rowspan="2" style="width: 7%;">No</th>
+        <th rowspan="2" style="width: 63%;">Nama Kegiatan</th>
+        <th colspan="5" style="width: 30%;">Minggu Ke-</th>
+      </tr>
+      <tr>
+        <th style="width: 6%;">1</th>
+        <th style="width: 6%;">2</th>
+        <th style="width: 6%;">3</th>
+        <th style="width: 6%;">4</th>
+        <th style="width: 6%;">5</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align: center;">1</td>
+        <td>Pengumpulan data katalog produk &amp; analisis kebutuhan</td>
+        <td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">2</td>
+        <td>Pemesanan nama domain, VPS, &amp; setup database Supabase</td>
+        <td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">3</td>
+        <td>Desain antarmuka &amp; coding Storefront Utama (Catalog, About)</td>
+        <td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">4</td>
+        <td>Pembuatan halaman New Drop &amp; Collections serta Hero Carousel</td>
+        <td class="gantt-active">&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">5</td>
+        <td>Penyempurnaan layout responsif &amp; 2-grid mobile tampilan HP</td>
+        <td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">6</td>
+        <td>Pengembangan halaman Detail Produk multi-foto &amp; stok per ukuran</td>
+        <td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">7</td>
+        <td>Pembuatan Cart Drawer geser &amp; indikator promo gratis ongkir</td>
+        <td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">8</td>
+        <td>Pengembangan sistem Login/Register Email &amp; Google OAuth</td>
+        <td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">9</td>
+        <td>Pengembangan halaman Profil &amp; ubah kata sandi pelanggan</td>
+        <td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">10</td>
+        <td>Pengembangan Buku Alamat Multi-Address (maks. 5 alamat &amp; Utama)</td>
+        <td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">11</td>
+        <td>Pengembangan halaman Checkout &amp; pemilih alamat otomatis</td>
+        <td>&nbsp;</td><td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">12</td>
+        <td>Implementasi kalkulasi ongkos kirim zona &amp; pilihan metode bayar</td>
+        <td>&nbsp;</td><td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">13</td>
+        <td>Pengembangan halaman Riwayat Pesanan &amp; Ulasan Verified Buyer</td>
+        <td>&nbsp;</td><td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">14</td>
+        <td>Pembuatan Dashboard Admin statistik &amp; proteksi hak akses Role</td>
+        <td>&nbsp;</td><td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">15</td>
+        <td>Pengembangan modul CRUD Produk Admin &amp; upload multi-foto</td>
+        <td>&nbsp;</td><td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">16</td>
+        <td>Pengembangan modul manajemen Banner promosi &amp; input nomor resi</td>
+        <td>&nbsp;</td><td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">17</td>
+        <td>Audit keamanan sesi JWT, proteksi CSRF API, &amp; pengecekan tipe kode</td>
+        <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">18</td>
+        <td>Pengisian konten awal katalog pakaian &amp; uji coba transaksi lengkap</td>
+        <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">19</td>
+        <td>Deploy website ke VPS, pasang Nginx &amp; SSL HTTPS, dan Rilis Online</td>
+        <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class="gantt-active">&nbsp;</td><td class="gantt-active">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">20</td>
+        <td>Pendampingan penggunaan Admin &amp; Maintenance awal</td>
+        <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td class="gantt-active">&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== HALAMAN 6-7: 6. KOMPONEN WEBSITE ==================== -->
+  <h2 class="bab-heading">6. KOMPONEN WEBSITE</h2>
+
+  <p class="prose">
+    Berikut merupakan rincian komponen fitur utama website toko online, sistem akun &amp; checkout, serta dashboard admin yang kami kembangkan. Kami memberikan kelonggaran untuk menyesuaikan kategori produk maupun tampilan konten pada toko sesuai kebutuhan usaha Bapak Zidni tanpa mengubah struktur modul utama.
+  </p>
+
+  <table class="proposal-table">
+    <thead>
+      <tr>
+        <th style="width: 6%; text-align: center;">No</th>
+        <th style="width: 24%; text-align: center;">Paket / Hak Akses</th>
+        <th style="width: 28%; text-align: center;">Modul / Item</th>
+        <th style="width: 42%; text-align: center;">Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Modul 1 -->
+      <tr>
+        <td rowspan="8" style="text-align: center;">1</td>
+        <td rowspan="8"><strong>Website Utama E-Commerce (Storefront)</strong></td>
+        <td>Halaman Katalog &amp; Hero Carousel</td>
+        <td>Menampilkan banner promosi bergulir otomatis (4 detik), daftar produk 2-grid di HP &amp; 3-grid di desktop.</td>
+      </tr>
+      <tr>
+        <td>Filter Kategori &amp; Pencarian</td>
+        <td>Filter real-time (All, Outerwear, T-Shirts, Jackets, Shirts, Denim) dan kolom pencarian produk instan.</td>
+      </tr>
+      <tr>
+        <td>Halaman New Drop</td>
+        <td>Menampilkan produk rilisan terbaru lengkap dengan indikator badge <em>NEW</em> dan sisa stok.</td>
+      </tr>
+      <tr>
+        <td>Halaman Collections</td>
+        <td>Mengelompokkan dan menyaring produk pakaian berdasarkan seri koleksi yang tersedia di database.</td>
+      </tr>
+      <tr>
+        <td>Detail Produk Multi-Foto</td>
+        <td>Galeri banyak gambar dengan panah navigasi &amp; thumbnail, deskripsi, spesifikasi konstruksi bahan, dan harga diskon.</td>
+      </tr>
+      <tr>
+        <td>Pemilih Ukuran &amp; Quick Add</td>
+        <td>Pemilihan ukuran (S, M, L, XL, dll.) beserta stok per ukuran dan status <em>Sold Out</em> otomatis bila stok habis.</td>
+      </tr>
+      <tr>
+        <td>Ulasan Pembeli Terverifikasi</td>
+        <td>Menampilkan rating bintang dan ulasan khusus dari pelanggan yang telah menyelesaikan pembelian produk tersebut.</td>
+      </tr>
+      <tr>
+        <td>Tentang Kami &amp; Navigasi Mobile</td>
+        <td>Profil brand (<span style="font-family: Consolas, monospace; font-size: 9.5pt;">/about</span>), bilah navigasi mobile langsung terlihat, serta font resmi Google Fonts.</td>
+      </tr>
+
+      <!-- Modul 2 -->
+      <tr>
+        <td rowspan="7" style="text-align: center;">2</td>
+        <td rowspan="7"><strong>Sistem Belanja, Akun &amp; Checkout</strong></td>
+        <td>Keranjang Geser (Cart Drawer)</td>
+        <td>Keranjang belanja interaktif dari sisi kanan layar dengan penghitung gratis ongkir minimal Rp 500.000.</td>
+      </tr>
+      <tr>
+        <td>Registrasi, Login &amp; Google OAuth</td>
+        <td>Masuk/daftar dengan Email &amp; Password terenkripsi Argon2 atau sekali klik menggunakan akun Google.</td>
+      </tr>
+      <tr>
+        <td>Profil &amp; Ganti Password</td>
+        <td>Pelanggan dapat memperbarui data nama, nomor HP, dan keamanan kata sandi akun secara mandiri.</td>
+      </tr>
+      <tr>
+        <td>Buku Alamat Multi-Address</td>
+        <td>Simpan hingga 5 alamat pengiriman (Rumah, Kantor, Kos/Apartemen, Lainnya) beserta tombol set <em>Alamat Utama</em>.</td>
+      </tr>
+      <tr>
+        <td>Riwayat Pesanan &amp; Lacak Resi</td>
+        <td>Pelanggan dapat memantau daftar pesanan, rincian barang, status pengiriman, dan nomor resi kurir.</td>
+      </tr>
+      <tr>
+        <td>Halaman Checkout &amp; Ongkos Kirim</td>
+        <td>Terhubung langsung ke daftar alamat pelanggan serta estimasi tarif kurir per zona (JNE, J&amp;T Express, SiCepat).</td>
+      </tr>
+      <tr>
+        <td>Pilihan Metode Pembayaran</td>
+        <td>Dukungan tampilan QRIS, Virtual Account (BCA, Mandiri, BNI, BRI, Permata), E-Wallet, dan Kartu (siap aktivasi Midtrans).</td>
+      </tr>
+
+      <!-- Modul 3 -->
+      <tr>
+        <td rowspan="5" style="text-align: center;">3</td>
+        <td rowspan="5"><strong>Dashboard Admin &amp; Manajemen Toko</strong></td>
+        <td>Hak Akses Admin &amp; Keamanan</td>
+        <td>Proteksi rute khusus akun <span style="font-family: Consolas, monospace; font-size: 9.5pt;">ADMIN</span>, sesi JWT HTTP-Only Cookie, serta proteksi CSRF pada API mutasi.</td>
+      </tr>
+      <tr>
+        <td>Ringkasan Statistik Toko</td>
+        <td>Menampilkan ringkasan total pendapatan, jumlah pesanan aktif, dan data ringkas performa toko.</td>
+      </tr>
+      <tr>
+        <td>Manajemen Produk &amp; Upload Foto</td>
+        <td>Tambah, ubah, dan hapus produk pakaian; unggah multi-foto ke Supabase Storage; atur harga coret dan stok per ukuran.</td>
+      </tr>
+      <tr>
+        <td>Manajemen Banner Promosi</td>
+        <td>Mengatur gambar kampanye, tag, judul, deskripsi, dan status aktif banner pada halaman utama katalog.</td>
+      </tr>
+      <tr>
+        <td>Manajemen Pesanan &amp; Resi</td>
+        <td>Mengubah status pesanan (Diproses &rarr; Dikirim &rarr; Dalam Perjalanan &rarr; Selesai) dan menginput nomor resi.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== HALAMAN 7-8: 7. BIAYA PENGEMBANGAN ==================== -->
+  <h2 class="bab-heading">7. BIAYA PENGEMBANGAN</h2>
+
+  <p class="prose">
+    Rincian pembiayaan pengembangan website e-commerce dibagi ke dalam 3 paket utama yang membentuk satu kesatuan sistem siap pakai. Apabila terdapat kebutuhan penambahan integrasi khusus di luar paket (misalnya integrasi live Payment Gateway produksi dan API kurir Sameday), Bapak/Ibu dapat mendiskusikannya bersama kami melalui narahubung pada proposal ini.
+  </p>
+
+  <table class="proposal-table">
+    <thead>
+      <tr>
+        <th style="width: 7%; text-align: center;">No</th>
+        <th style="width: 65%; text-align: center;">Nama Produk</th>
+        <th style="width: 28%; text-align: center;">Harga Paket</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align: center;">1</td>
+        <td>
+          <strong>Paket Website Utama E-Commerce (Storefront &amp; Katalog)</strong>
+          <ul style="margin: 4pt 0 2pt 0; padding-left: 18pt;">
+            <li>Desain web modern <em>Fresh &amp; Clean Minimalist</em> responsif HP &amp; Desktop</li>
+            <li>Halaman Katalog dengan Hero Banner Carousel, filter &amp; pencarian</li>
+            <li>Halaman New Drop Collection, Collections, dan Profil Usaha (/about)</li>
+            <li>Halaman Detail Produk multi-foto, varian ukuran, &amp; ulasan pembeli</li>
+          </ul>
+        </td>
+        <td>Rp. 2.500.000</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">2</td>
+        <td>
+          <strong>Paket Sistem Belanja, Akun Pelanggan &amp; Checkout</strong>
+          <ul style="margin: 4pt 0 2pt 0; padding-left: 18pt;">
+            <li>Keranjang Belanja Geser (<em>Cart Drawer</em>) &amp; indikator gratis ongkir</li>
+            <li>Registrasi &amp; Login Email serta tombol Login Google (OAuth 2.0)</li>
+            <li>Halaman Profil, Ubah Password, &amp; Riwayat Pesanan pelanggan</li>
+            <li>Buku Alamat <em>Multi-Address</em> (maks. 5 alamat &amp; Alamat Utama)</li>
+            <li>Halaman Checkout, kalkulasi ongkir zona, &amp; opsi metode pembayaran</li>
+          </ul>
+        </td>
+        <td>Rp. 2.500.000</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">3</td>
+        <td>
+          <strong>Paket Dashboard Admin &amp; Manajemen Toko</strong>
+          <ul style="margin: 4pt 0 2pt 0; padding-left: 18pt;">
+            <li>Dashboard statistik penjualan &amp; ringkasan pesanan</li>
+            <li>Manajemen CRUD produk pakaian, upload multi-foto &amp; stok per ukuran</li>
+            <li>Manajemen banner promosi halaman depan</li>
+            <li>Manajemen status pengiriman pesanan &amp; input nomor resi</li>
+            <li>Setup database PostgreSQL, proteksi keamanan, &amp; deploy awal ke VPS</li>
+          </ul>
+        </td>
+        <td>Rp. 2.000.000</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: center; font-weight: bold;">Total</td>
+        <td style="font-weight: bold;">Rp. 7.000.000</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: center; font-weight: bold;">Diskon Khusus</td>
+        <td style="font-weight: bold;">Rp. 500.000</td>
+      </tr>
+      <tr class="total-final">
+        <td colspan="2" style="text-align: center;">Total Akhir</td>
+        <td>Rp. 6.500.000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="font-size: 10pt; font-style: italic; color: #333333; margin-top: -6pt; margin-bottom: 14pt;">
+    *Catatan: Biaya sewa domain tahunan dan berlangganan VPS/cloud pihak ketiga ditanggung oleh pemilik usaha sesuai paket penyedia layanan yang dipilih.
+  </p>
+
+  <!-- ==================== 8. NARAHUBUNG ==================== -->
+  <h2 class="bab-heading">8. NARAHUBUNG</h2>
+
+  <p class="prose" style="margin-bottom: 4pt;">
+    Apabila terdapat pertanyaan maupun hal yang perlu didiskusikan lebih lanjut, Bapak/Ibu dapat menghubungi kami melalui kontak di bawah ini :
+  </p>
+
+  <table style="margin-left: 1.2cm; border-collapse: collapse; font-family: 'Times New Roman', Times, serif; font-size: 12pt; margin-bottom: 14pt;">
+    <tr>
+      <td style="width: 110pt; padding: 2pt 0;">WhatsApp</td>
+      <td style="padding: 2pt 6pt;">:</td>
+      <td style="padding: 2pt 0;">[08xxxxxxxxxx]</td>
+    </tr>
+    <tr>
+      <td style="padding: 2pt 0;">Email</td>
+      <td style="padding: 2pt 6pt;">:</td>
+      <td style="padding: 2pt 0;">[email-anda@domain.com]</td>
+    </tr>
+    <tr>
+      <td style="padding: 2pt 0;">Website / Demo</td>
+      <td style="padding: 2pt 6pt;">:</td>
+      <td style="padding: 2pt 0;">[www.domain-anda.com]</td>
+    </tr>
+  </table>
+
+  <br clear="all" class="page-break" />
+
+  <!-- ==================== HALAMAN 9-10: 9. CLIENT & PORTOFOLIO & 10. PENUTUP ==================== -->
+  <h2 class="bab-heading">9. CLIENT &amp; PORTOFOLIO</h2>
+
+  <p class="prose">
+    Sebagai gambaran hasil pengembangan sistem berbasis web yang telah kami bangun dan siap diterapkan pada bisnis Bapak Zidni, berikut adalah daftar proyek serta portofolio pengembangan kami :
+  </p>
+
+  <p style="text-align: center; font-weight: bold; font-size: 11.5pt; margin-top: 6pt; margin-bottom: 4pt;">
+    PORTOFOLIO PENGEMBANGAN
+  </p>
+
+  <table class="porto-table">
+    <thead>
+      <tr>
+        <th style="width: 8%; text-align: center;">No</th>
+        <th style="width: 56%; text-align: center;">Project</th>
+        <th style="width: 36%; text-align: center;">Klien / Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align: center;">1</td>
+        <td>Platform E-Commerce Fashion (<em>urban.kamen</em>) &mdash; Next.js, Prisma, PostgreSQL</td>
+        <td>UMKM Fashion / Storefront &amp; Admin Dashboard</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">2</td>
+        <td>[Isi Nama Proyek Anda]</td>
+        <td>[Isi Nama Klien / Instansi]</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">3</td>
+        <td>[Isi Nama Proyek Anda]</td>
+        <td>[Isi Nama Klien / Instansi]</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">4</td>
+        <td>[Isi Nama Proyek Anda]</td>
+        <td>[Isi Nama Klien / Instansi]</td>
+      </tr>
+      <tr>
+        <td style="text-align: center;">5</td>
+        <td>[Isi Nama Proyek Anda]</td>
+        <td>[Isi Nama Klien / Instansi]</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="bab-heading">10. PENUTUP</h2>
+
+  <p class="prose">
+    Demikian proposal penawaran pengembangan website e-commerce fashion ini kami buat. Atas perhatian dan kerja samanya, kami ucapkan terima kasih. Semoga penawaran ini dapat menjadi awal kerja sama yang saling menguntungkan saat ini dan di masa mendatang.
+  </p>
+
+  <table class="ttd-table" style="margin-top: 24pt;">
+    <tr>
+      <td style="width: 55%;">&nbsp;</td>
+      <td style="width: 45%;">
+        Hormat Kami,<br />
+        Pengembang Website E-Commerce
+        <br /><br /><br /><br />
+        <strong>Ridho Surya</strong>
+      </td>
+    </tr>
+  </table>
+
+</div>
+</body>
+</html>

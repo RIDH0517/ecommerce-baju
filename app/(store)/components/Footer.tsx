@@ -87,7 +87,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-10 border-t border-neutral-200 pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] text-neutral-400">
-          <p>© {new Date().getFullYear()} urban.kamen. Seluruh hak cipta dilindungi.</p>
+          <p>© 2026 urban.kamen. Seluruh hak cipta dilindungi.</p>
           <p className="font-mono">Modern Streetwear Essentials</p>
         </div>
       </div>

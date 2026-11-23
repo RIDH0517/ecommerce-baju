@@ -3,11 +3,11 @@ import { prisma } from "@/lib/prisma";
 
 // GET — Ambil semua produk aktif untuk halaman customer (publik, tanpa autentikasi)
 export async function GET(req: Request) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const category = searchParams.get("category");
-    const search = searchParams.get("search");
+  const { searchParams } = new URL(req.url);
+  const category = searchParams.get("category");
+  const search = searchParams.get("search");
 
+  try {
     const products = await prisma.product.findMany({
       where: {
         stock: { gt: 0 },
