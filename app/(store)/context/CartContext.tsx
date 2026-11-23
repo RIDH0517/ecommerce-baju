@@ -1,6 +1,13 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/(store)/context/AuthContext";
 
@@ -230,6 +237,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [reviews, setReviews] = useState<Record<string, ReviewItem[]>>(INITIAL_REVIEWS);
   const [isHydrated, setIsHydrated] = useState(false);
 
+  const activeUserIdRef = useRef<string | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const currentUserId = status === "authenticated" && user ? user.id : null;
   const userEmail = user?.name || user?.email || "Pelanggan Terverifikasi";
 
   const [toastProduct, setToastProduct] = useState<{
@@ -238,36 +249,120 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     image: string;
   } | null>(null);
 
+  // Bersihkan key localStorage global lama & muat ulasan tersimpan saat mount
   useEffect(() => {
     let active = true;
     Promise.resolve().then(() => {
       if (!active) return;
       try {
-        const savedCart = localStorage.getItem("urbankamen_cart");
-        if (savedCart) setCart(JSON.parse(savedCart));
-
-        const savedPurchases = localStorage.getItem("urbankamen_purchased");
-        if (savedPurchases) setPurchasedIds(JSON.parse(savedPurchases));
+        localStorage.removeItem("urbankamen_cart");
+        localStorage.removeItem("urbankamen_purchased");
 
         const savedReviews = localStorage.getItem("urbankamen_reviews");
         if (savedReviews) setReviews(JSON.parse(savedReviews));
       } catch (e) {
         console.error(e);
       }
-      setIsHydrated(true);
     });
     return () => {
       active = false;
     };
   }, []);
 
-  useEffect(() => {
-    // Jangan menimpa keranjang tersimpan dengan [] sebelum data selesai dimuat.
-    if (!isHydrated) return;
-    localStorage.setItem("urbankamen_cart", JSON.stringify(cart));
-  }, [cart, isHydrated]);
+  const syncCartFromServer = useCallback(async (expectedUserId: string) => {
+    try {
+      const res = await fetch("/api/cart", {
+        credentials: "include",
+        cache: "no-store",
+      });
+      if (activeUserIdRef.current !== expectedUserId) return;
+      if (res.ok) {
+        const data = await res.json();
+        if (activeUserIdRef.current !== expectedUserId) return;
+        setCart(Array.isArray(data.items) ? data.items : []);
+        setPurchasedIds(Array.isArray(data.purchasedIds) ? data.purchasedIds : []);
+      }
+    } catch (err) {
+      console.error("[CartContext] Gagal menyinkronkan keranjang:", err);
+    } finally {
+      if (activeUserIdRef.current === expectedUserId) {
+        setIsHydrated(true);
+      }
+    }
+  }, []);
 
-  const clearCart = () => setCart([]);
+  // Sinkronkan keranjang & riwayat pembelian setiap kali status/akun login berubah
+  useEffect(() => {
+    activeUserIdRef.current = currentUserId;
+    let active = true;
+
+    Promise.resolve().then(() => {
+      if (!active) return;
+
+      if (status === "loading") {
+        setIsHydrated(false);
+        return;
+      }
+
+      if (!currentUserId) {
+        setCart([]);
+        setPurchasedIds([]);
+        setIsCartOpen(false);
+        setIsHydrated(true);
+        return;
+      }
+
+      // Reset sementara agar keranjang akun sebelumnya tidak sempat terlihat saat ganti akun
+      setCart([]);
+      setPurchasedIds([]);
+      setIsHydrated(false);
+      void syncCartFromServer(currentUserId);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [status, currentUserId, syncCartFromServer]);
+
+  const mutateCartOnServer = useCallback(
+    async (
+      expectedUserId: string,
+      method: "POST" | "PATCH" | "DELETE",
+      body: Record<string, unknown>
+    ) => {
+      try {
+        const res = await fetch("/api/cart", {
+          method,
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        if (activeUserIdRef.current !== expectedUserId) return;
+        if (res.ok) {
+          const data = await res.json();
+          if (activeUserIdRef.current !== expectedUserId) return;
+          if (Array.isArray(data.items)) {
+            setCart(data.items);
+          }
+        } else {
+          void syncCartFromServer(expectedUserId);
+        }
+      } catch (err) {
+        console.error(`[CartContext] Gagal ${method} /api/cart:`, err);
+        if (activeUserIdRef.current === expectedUserId) {
+          void syncCartFromServer(expectedUserId);
+        }
+      }
+    },
+    [syncCartFromServer]
+  );
+
+  const clearCart = () => {
+    const requestUserId = activeUserIdRef.current;
+    setCart([]);
+    if (!requestUserId) return;
+    void mutateCartOnServer(requestUserId, "DELETE", { clearAll: true });
+  };
 
   const setLoggedInState = (nextStatus: boolean) => {
     if (nextStatus) {
@@ -286,9 +381,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       router.push(`/login?next=${encodeURIComponent(nextPath)}`);
       return;
     }
-    if (status === "loading") {
+    if (status === "loading" || !currentUserId) {
       return;
     }
+
+    const requestUserId = currentUserId;
 
     setCart((prev) => {
       const existingIndex = prev.findIndex(
@@ -296,7 +393,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       );
       if (existingIndex > -1) {
         const updated = [...prev];
-        updated[existingIndex].quantity += qty;
+        updated[existingIndex] = {
+          ...updated[existingIndex],
+          quantity: updated[existingIndex].quantity + qty,
+        };
         return updated;
       }
       return [...prev, { ...product, quantity: qty }];
@@ -308,32 +408,51 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       image: product.image,
     });
 
-    setTimeout(() => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => {
       setToastProduct(null);
     }, 3500);
+
+    void mutateCartOnServer(requestUserId, "POST", {
+      productId: product.id,
+      size: product.size,
+      quantity: qty,
+    });
   };
 
   const removeFromCart = (id: string, size: string) => {
+    const requestUserId = activeUserIdRef.current;
     setCart((prev) => prev.filter((i) => !(i.id === id && i.size === size)));
+    if (!requestUserId) return;
+    void mutateCartOnServer(requestUserId, "DELETE", { productId: id, size });
   };
 
   const updateQuantity = (id: string, size: string, delta: number) => {
+    const requestUserId = activeUserIdRef.current;
+    const targetItem = cart.find((item) => item.id === id && item.size === size);
+    if (!targetItem) return;
+
+    const nextQuantity = Math.max(1, Math.min(99, targetItem.quantity + delta));
+    if (nextQuantity === targetItem.quantity) return;
+
     setCart((prev) =>
-      prev.map((item) => {
-        if (item.id === id && item.size === size) {
-          return { ...item, quantity: Math.max(1, item.quantity + delta) };
-        }
-        return item;
-      })
+      prev.map((item) =>
+        item.id === id && item.size === size
+          ? { ...item, quantity: nextQuantity }
+          : item
+      )
     );
+
+    if (!requestUserId) return;
+    void mutateCartOnServer(requestUserId, "PATCH", {
+      productId: id,
+      size,
+      quantity: nextQuantity,
+    });
   };
 
   const markAsPurchased = (productIds: string[]) => {
-    setPurchasedIds((prev) => {
-      const updated = Array.from(new Set([...prev, ...productIds]));
-      localStorage.setItem("urbankamen_purchased", JSON.stringify(updated));
-      return updated;
-    });
+    setPurchasedIds((prev) => Array.from(new Set([...prev, ...productIds])));
   };
 
   const addReview = (
