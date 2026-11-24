@@ -34,6 +34,24 @@ export default function LoginPage() {
       });
 
       const data = await res.json();
+      if (res.status === 403 && data.code === "EMAIL_NOT_VERIFIED") {
+        const targetEmail = (typeof data.email === "string" && data.email) || email.trim().toLowerCase();
+        const rawNext =
+          typeof window !== "undefined"
+            ? new URLSearchParams(window.location.search).get("next")
+            : null;
+        const safeNext = getSafeNextPath(rawNext);
+        try {
+          sessionStorage.setItem("urbankamen_pending_otp_email", targetEmail);
+        } catch {
+          // Abaikan jika sessionStorage tidak tersedia
+        }
+        const query = new URLSearchParams({ email: targetEmail });
+        if (safeNext) query.set("next", safeNext);
+        router.push(`/verify-otp?${query.toString()}`);
+        return;
+      }
+
       if (!res.ok) throw new Error(data.error || "Gagal masuk");
 
       if (data.user) {

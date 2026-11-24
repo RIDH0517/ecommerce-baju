@@ -71,7 +71,13 @@ export async function POST(req: Request) {
           email: email.toLowerCase(),
           passwordHash: randomPasswordHash,
           role: "CUSTOMER",
+          emailVerified: new Date(),
         },
+      });
+    } else if (!user.emailVerified) {
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
       });
     }
 

@@ -41,11 +41,26 @@ export default function RegisterPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Gagal melakukan registrasi");
 
-      // Tampilkan pesan sukses inline lalu arahkan ke halaman login
-      setSuccess("Registrasi berhasil! Mengarahkan ke halaman login...");
+      const targetEmail = (typeof data.email === "string" && data.email) || email.trim().toLowerCase();
+      let nextParam = "";
+      try {
+        sessionStorage.setItem("urbankamen_pending_otp_email", targetEmail);
+        const rawNext = new URLSearchParams(window.location.search).get("next");
+        if (rawNext && rawNext.startsWith("/") && !rawNext.startsWith("//") && !rawNext.startsWith("/\\")) {
+          nextParam = rawNext;
+        }
+      } catch {
+        // Abaikan jika sessionStorage tidak tersedia
+      }
+
+      const query = new URLSearchParams({ email: targetEmail });
+      if (nextParam) query.set("next", nextParam);
+
+      // Tampilkan pesan sukses inline lalu arahkan ke halaman verifikasi OTP
+      setSuccess("Kode OTP 6 digit telah dikirim ke email Anda. Mengarahkan...");
       setTimeout(() => {
-        router.push("/login");
-      }, 1200);
+        router.push(`/verify-otp?${query.toString()}`);
+      }, 900);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Gagal melakukan registrasi");
     } finally {
