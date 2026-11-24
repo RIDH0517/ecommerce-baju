@@ -28,7 +28,11 @@ export async function GET(req: Request) {
       },
     });
 
-    return NextResponse.json(products);
+    return NextResponse.json(products, {
+      headers: {
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+      },
+    });
   } catch (error) {
     console.error("[GET /api/products]", error);
     return NextResponse.json({ error: "Gagal mengambil produk" }, { status: 500 });

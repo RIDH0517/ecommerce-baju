@@ -21,7 +21,11 @@ export async function GET(_req: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Produk tidak ditemukan" }, { status: 404 });
     }
 
-    return NextResponse.json(product);
+    return NextResponse.json(product, {
+      headers: {
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+      },
+    });
   } catch (error) {
     console.error("[GET /api/products/[id]]", error);
     return NextResponse.json({ error: "Gagal mengambil detail produk" }, { status: 500 });

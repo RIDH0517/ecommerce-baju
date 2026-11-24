@@ -42,7 +42,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 text-neutral-950 font-[Inter,system-ui,sans-serif] flex flex-col">
+    <div className="min-h-screen overflow-x-clip bg-neutral-50 text-neutral-950 font-[Inter,system-ui,sans-serif] flex flex-col">
       {/* ── TOP NAVIGATION BAR ── */}
       <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
@@ -115,7 +115,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Mobile Secondary Nav */}
         <nav
           aria-label="Navigasi Admin Mobile"
-          className="flex md:hidden border-t border-neutral-200 overflow-x-auto bg-white px-4"
+          className="flex md:hidden border-t border-neutral-200 overflow-x-auto bg-white px-4 no-scrollbar"
         >
           {NAV_ITEMS.map((item) => {
             const active = item.match(pathname);

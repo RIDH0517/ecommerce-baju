@@ -95,7 +95,7 @@ export default function AccountOrdersPage() {
   }, [status, router]);
 
   return (
-    <div className="min-h-screen bg-white text-neutral-950 font-[Inter,sans-serif]">
+    <div className="min-h-screen overflow-x-clip bg-white text-neutral-950 font-[Inter,sans-serif]">
       <Navbar />
       <PageTransition>
         <main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
@@ -143,9 +143,9 @@ export default function AccountOrdersPage() {
                       className="border border-neutral-200 p-5 hover:border-neutral-950 transition-colors"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-100 pb-3">
-                        <div>
-                          <p className="font-mono text-xs font-bold text-neutral-950">#{order.id}</p>
-                          <p className="mt-0.5 text-[11px] text-neutral-500">
+                        <div className="min-w-0">
+                          <p className="font-mono text-xs font-bold text-neutral-950 break-all">#{order.id}</p>
+                          <p className="mt-0.5 text-[11px] text-neutral-500 break-words">
                             {dateLabel} · {totalQty} item
                             {order.trackingNumber ? ` · Resi: ${order.trackingNumber}` : ""}
                           </p>

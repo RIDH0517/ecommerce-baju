@@ -312,7 +312,7 @@ export default function CheckoutPage() {
     }));
 
   return (
-    <div className="min-h-screen bg-white text-neutral-950 font-[Inter,sans-serif]">
+    <div className="min-h-screen overflow-x-clip bg-white text-neutral-950 font-[Inter,sans-serif]">
       <Navbar />
       <PageTransition>
         <main className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 sm:py-14">

@@ -59,7 +59,7 @@ export default function Navbar() {
           {status === "loading" ? (
             <div
               aria-hidden="true"
-              className="h-8 sm:h-9 w-20 sm:w-24 border border-neutral-200 bg-neutral-100 animate-pulse"
+              className="h-8 sm:h-9 w-16 sm:w-20 border border-neutral-200/60 bg-neutral-100/60 animate-pulse"
             />
           ) : isLoggedIn ? (
             <ProfileMenu />
