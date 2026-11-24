@@ -24,7 +24,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "urban.kamen — Streetwear Essentials",
+  title: "urbankamen",
   description: "Modern Streetwear & Lifestyle Brand",
 };
 
