@@ -135,6 +135,8 @@ export default function CheckoutPage() {
   );
 
   const selectedProvince = selectedAddress?.province ?? "";
+  const selectedCity = selectedAddress?.city ?? "";
+  const selectedPostalCode = selectedAddress?.postalCode ?? "";
 
   // Payload keranjang yang dikirim ke server (tanpa harga, server yang menentukan harga).
   const cartPayload = useMemo(
@@ -142,12 +144,12 @@ export default function CheckoutPage() {
     [cart]
   );
   const cartSignature = JSON.stringify(cartPayload);
-  const requestKey = `${cartSignature}|${selectedProvince}`;
+  const requestKey = `${cartSignature}|${selectedProvince}|${selectedPostalCode}`;
   const shouldFetch = isHydrated && cartPayload.length > 0 && authStatus === "authenticated";
   const quoteLoading = shouldFetch && resolved.key !== requestKey;
   const quoteError = resolved.key === requestKey ? resolved.error : "";
 
-  // Ambil ringkasan dari server setiap kali isi keranjang atau provinsi alamat berubah.
+  // Ambil ringkasan dari server setiap kali isi keranjang atau alamat berubah.
   useEffect(() => {
     if (!shouldFetch) return;
 
@@ -158,7 +160,12 @@ export default function CheckoutPage() {
     fetch("/api/checkout/quote", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items: cartPayload, province: selectedProvince }),
+      body: JSON.stringify({
+        items: cartPayload,
+        province: selectedProvince,
+        city: selectedCity,
+        postalCode: selectedPostalCode,
+      }),
       signal: controller.signal,
     })
       .then(async (res) => {

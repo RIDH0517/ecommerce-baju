@@ -53,7 +53,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Data keranjang tidak valid." }, { status: 400 });
   }
 
-  const province = typeof body.province === "string" ? body.province : "";
+  const province = typeof body.province === "string" ? body.province.trim() : "";
+  const city = typeof body.city === "string" ? body.city.trim().slice(0, 100) : "";
+  const rawPostalCode = typeof body.postalCode === "string" ? body.postalCode : "";
+  const postalCode = rawPostalCode.replace(/\D/g, "").slice(0, 5);
   const hasProvince = (PROVINCES as readonly string[]).includes(province);
 
   try {
@@ -125,7 +128,11 @@ export async function POST(req: Request) {
 
     const shippingRates = hasProvince
       ? await shippingProvider.getRates({
-          destination: { province },
+          destination: {
+            province,
+            city: city || undefined,
+            postalCode: postalCode || undefined,
+          },
           weightGram: totalQty * DEFAULT_ITEM_WEIGHT_GRAM,
           subtotal,
         })

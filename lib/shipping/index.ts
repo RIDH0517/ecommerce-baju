@@ -1,8 +1,8 @@
 import type { ShippingProvider } from "./types";
-import { FlatRateShippingProvider } from "./flatRateProvider";
+import { BiteshipShippingProvider } from "./biteshipProvider";
 
-// Ganti di sini untuk beralih ke API ongkir real-time (mis. Biteship / RajaOngkir).
-export const shippingProvider: ShippingProvider = new FlatRateShippingProvider();
+// Menggunakan Biteship Rates API dengan auto-fallback ke tarif zona (FlatRateShippingProvider).
+export const shippingProvider: ShippingProvider = new BiteshipShippingProvider();
 
 export * from "./types";
 export * from "./config";
