@@ -58,7 +58,12 @@ export async function GET() {
     const [items, purchasedRows] = await Promise.all([
       getUserCartItems(session.userId),
       prisma.orderItem.findMany({
-        where: { order: { userId: session.userId } },
+        where: {
+          order: {
+            userId: session.userId,
+            OR: [{ payment: null }, { payment: { status: "SUCCESS" } }],
+          },
+        },
         select: { productId: true },
         distinct: ["productId"],
       }),

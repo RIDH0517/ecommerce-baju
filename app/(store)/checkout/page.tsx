@@ -11,7 +11,12 @@ import { useCart } from "@/app/(store)/context/CartContext";
 import { MAX_ADDRESSES_PER_USER, type UserAddress } from "@/lib/addresses";
 import { FREE_SHIPPING_THRESHOLD } from "@/lib/shipping/config";
 import type { ShippingRate } from "@/lib/shipping/types";
-import { PAYMENT_METHODS, PAYMENT_GATEWAY_ENABLED, type PaymentMethodId } from "@/lib/payment/methods";
+import {
+  DEFAULT_PAYMENT_METHOD,
+  PAYMENT_METHODS,
+  type PaymentMethodId,
+} from "@/lib/payment/methods";
+import { loadMidtransSnap } from "@/lib/payment/snapClient";
 
 interface QuoteLine {
   productId: string;
@@ -48,7 +53,7 @@ const rateKey = (r: Pick<ShippingRate, "courierCode" | "service">) => `${r.couri
 export default function CheckoutPage() {
   const router = useRouter();
   const { user, status: authStatus } = useAuth();
-  const { cart, isHydrated, setIsCartOpen } = useCart();
+  const { cart, isHydrated, setIsCartOpen, clearCart, markAsPurchased } = useCart();
 
   // Buku alamat pelanggan
   const [addresses, setAddresses] = useState<UserAddress[]>([]);
@@ -62,7 +67,8 @@ export default function CheckoutPage() {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [shippingKey, setShippingKey] = useState("");
-  const [paymentId, setPaymentId] = useState<PaymentMethodId | "">("");
+  const [paymentId, setPaymentId] = useState<PaymentMethodId | "">(DEFAULT_PAYMENT_METHOD);
+  const [completedOrderId, setCompletedOrderId] = useState<string | null>(null);
 
   const [quote, setQuote] = useState<Quote | null>(null);
   const [resolved, setResolved] = useState<{ key: string; error: string }>({ key: "", error: "" });
@@ -220,46 +226,119 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (!selectedAddress || !selectedRate) return;
+
+    const purchasedProductIds = [...new Set(cartPayload.map((i) => i.productId))];
     setSubmitting(true);
     try {
-      const res = await fetch("/api/checkout/quote", {
+      const checkoutRes = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          addressId: selectedAddress.id,
+          courierCode: selectedRate.courierCode,
+          service: selectedRate.service,
+          paymentMethod: paymentId,
           items: cartPayload,
-          province: selectedProvince,
-          courierCode: selectedRate?.courierCode,
-          service: selectedRate?.service,
         }),
       });
-      if (res.status === 401) {
+
+      if (checkoutRes.status === 401) {
         router.push("/login?next=/checkout");
         return;
       }
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal memvalidasi pesanan.");
-      setQuote(data);
-      if (!data.isValid) {
-        setSubmitNotice("Beberapa item perlu disesuaikan sebelum melanjutkan. Periksa ringkasan pesanan.");
-        return;
+
+      const checkoutData = await checkoutRes.json();
+      if (!checkoutRes.ok) {
+        // Segarkan ringkasan bila stok berubah di server
+        if (checkoutRes.status === 409) {
+          const quoteRes = await fetch("/api/checkout/quote", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              items: cartPayload,
+              province: selectedProvince,
+              city: selectedCity,
+              postalCode: selectedPostalCode,
+              courierCode: selectedRate.courierCode,
+              service: selectedRate.service,
+            }),
+          });
+          if (quoteRes.ok) {
+            setQuote((await quoteRes.json()) as Quote);
+          }
+        }
+        throw new Error(checkoutData.error || "Gagal membuat pesanan pembayaran.");
       }
-      if (!data.selectedShipping) {
-        setErrors((prev) => ({ ...prev, shipping: "Jasa pengiriman tidak tersedia, pilih ulang." }));
+
+      const {
+        orderId,
+        snapToken,
+        redirectUrl,
+        snapClientKey,
+        snapScriptUrl,
+      } = checkoutData as {
+        orderId: string;
+        snapToken: string;
+        redirectUrl: string;
+        snapClientKey: string;
+        snapScriptUrl: string;
+      };
+
+      // Jaga halaman tetap tenang selama popup QRIS terbuka meskipun keranjang dikosongkan
+      setCompletedOrderId(orderId);
+      clearCart();
+
+      const finalizeAndRedirect = async () => {
+        try {
+          const verifyRes = await fetch(`/api/account/orders/${encodeURIComponent(orderId)}/verify`, {
+            method: "POST",
+          });
+          if (verifyRes.ok) {
+            const verifyJson = await verifyRes.json();
+            if (verifyJson?.order?.payment?.status === "SUCCESS") {
+              markAsPurchased(purchasedProductIds);
+            }
+          }
+        } catch {
+          // Abaikan error jaringan sementara; halaman detail pesanan akan mengecek ulang
+        }
+        router.push(`/account/orders/${orderId}`);
+      };
+
+      try {
+        await loadMidtransSnap(snapScriptUrl, snapClientKey);
+      } catch {
+        if (redirectUrl) {
+          window.location.assign(redirectUrl);
+          return;
+        }
+        router.push(`/account/orders/${orderId}`);
         return;
       }
 
-      if (!PAYMENT_GATEWAY_ENABLED) {
-        setSubmitNotice(
-          `Pesanan valid dikirim ke ${selectedAddress?.label} (${selectedAddress?.city}) dengan total ${formatIDR(data.total)}. Integrasi pembayaran Midtrans belum aktif, jadi pesanan belum dibuat.`
-        );
-        return;
+      if (window.snap) {
+        window.snap.pay(snapToken, {
+          onSuccess: () => {
+            void finalizeAndRedirect();
+          },
+          onPending: () => {
+            void finalizeAndRedirect();
+          },
+          onError: () => {
+            void finalizeAndRedirect();
+          },
+          onClose: () => {
+            void finalizeAndRedirect();
+          },
+        });
+      } else if (redirectUrl) {
+        window.location.assign(redirectUrl);
+      } else {
+        router.push(`/account/orders/${orderId}`);
       }
-
-      // TODO (Midtrans): POST /api/checkout dengan selectedAddress.id → buat Order + Payment,
-      // dapatkan snapToken, lalu panggil window.snap.pay(snapToken) dan arahkan ke /orders/[id].
     } catch (err) {
       setSubmitNotice(err instanceof Error ? err.message : "Terjadi kesalahan.");
-    } finally {
       setSubmitting(false);
     }
   };
@@ -276,6 +355,36 @@ export default function CheckoutPage() {
             <div className="lg:col-span-5 h-72 bg-neutral-100 animate-pulse" />
           </div>
         </main>
+      </div>
+    );
+  }
+
+  // ── Menunggu popup pembayaran QRIS / pengalihan ke halaman pesanan ──
+  if (completedOrderId) {
+    return (
+      <div className="min-h-screen bg-white text-neutral-950 font-[Inter,sans-serif]">
+        <Navbar />
+        <PageTransition>
+          <main className="mx-auto max-w-xl px-4 py-28 text-center space-y-4">
+            <span className="inline-block border border-emerald-200 bg-emerald-50 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700">
+              QRIS MIDTRANS AKTIF
+            </span>
+            <h1 className="text-2xl font-black tracking-tight font-[Montserrat,sans-serif]">
+              SELESAIKAN PEMBAYARAN QRIS
+            </h1>
+            <p className="text-sm text-neutral-500 leading-relaxed">
+              Silakan scan kode QRIS pada jendela pembayaran Midtrans. Jika jendela tertutup, Anda dapat membukanya kembali dari halaman detail pesanan.
+            </p>
+            <div className="pt-4">
+              <Link
+                href={`/account/orders/${completedOrderId}`}
+                className="inline-block bg-neutral-950 px-6 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white hover:bg-emerald-700 transition-colors font-[Montserrat,sans-serif]"
+              >
+                Lihat Detail Pesanan →
+              </Link>
+            </div>
+          </main>
+        </PageTransition>
       </div>
     );
   }
@@ -553,7 +662,7 @@ export default function CheckoutPage() {
                   tabIndex={-1}
                   role="radiogroup"
                   aria-label="Metode pembayaran"
-                  className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 focus:outline-none"
+                  className="mt-6 grid grid-cols-1 gap-3 focus:outline-none"
                 >
                   {PAYMENT_METHODS.map((m) => {
                     const active = m.id === paymentId;

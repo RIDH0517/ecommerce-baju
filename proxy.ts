@@ -15,8 +15,14 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const method = request.method;
 
-  // ── 1. CSRF Protection: blokir mutasi dari origin asing ──
-  if (pathname.startsWith("/api/") && ["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+  const isMidtransWebhook = pathname === "/api/payments/midtrans/webhook";
+
+  // ── 1. CSRF Protection: blokir mutasi dari origin asing (kecuali webhook Midtrans yang divalidasi via SHA-512) ──
+  if (
+    !isMidtransWebhook &&
+    pathname.startsWith("/api/") &&
+    ["POST", "PUT", "PATCH", "DELETE"].includes(method)
+  ) {
     const origin = request.headers.get("origin");
     const host = request.headers.get("host");
 

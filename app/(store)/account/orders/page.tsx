@@ -10,6 +10,7 @@ import { useAuth } from "@/app/(store)/context/AuthContext";
 
 interface OrderItemDto {
   id: string;
+  size?: string | null;
   quantity: number;
   unitPrice: string | number;
   product: {
@@ -24,6 +25,7 @@ interface OrderDto {
   id: string;
   totalAmount: string | number;
   shippingAddress: string;
+  courier?: string | null;
   trackingNumber: string | null;
   shippingStatus: "DIPROSES" | "DIKIRIM" | "DALAM_PERJALANAN" | "SELESAI";
   createdAt: string;
@@ -147,6 +149,7 @@ export default function AccountOrdersPage() {
                           <p className="font-mono text-xs font-bold text-neutral-950 break-all">#{order.id}</p>
                           <p className="mt-0.5 text-[11px] text-neutral-500 break-words">
                             {dateLabel} · {totalQty} item
+                            {order.courier ? ` · ${order.courier}` : ""}
                             {order.trackingNumber ? ` · Resi: ${order.trackingNumber}` : ""}
                           </p>
                         </div>

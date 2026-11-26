@@ -7,6 +7,7 @@ type PaymentStatus = "PENDING" | "SUCCESS" | "FAILED";
 
 interface AdminOrderItem {
   id: string;
+  size?: string | null;
   quantity: number;
   unitPrice: string | number;
   product: {
@@ -21,6 +22,8 @@ interface AdminOrder {
   id: string;
   totalAmount: string | number;
   shippingAddress: string;
+  courier?: string | null;
+  shippingCost?: string | number;
   trackingNumber: string | null;
   shippingStatus: ShippingStatus;
   createdAt: string;
@@ -135,7 +138,7 @@ function OrderDetailEditor({
 
         <div>
           <span className="font-mono text-[10px] uppercase tracking-wider text-neutral-400 block">
-            Alamat Pengiriman
+            Alamat Pengiriman{order.courier ? ` · Kurir: ${order.courier}` : ""}
           </span>
           <p className="text-neutral-700 whitespace-pre-line leading-relaxed">
             {order.shippingAddress}
@@ -156,7 +159,7 @@ function OrderDetailEditor({
                   {item.product?.name ?? "Produk"}
                 </p>
                 <p className="font-mono text-[10px] text-neutral-500">
-                  {item.quantity} × {formatIDR(item.unitPrice)}
+                  {item.size ? `SIZE ${item.size} · ` : ""}{item.quantity} × {formatIDR(item.unitPrice)}
                 </p>
               </div>
               <span className="font-mono font-semibold text-neutral-950 flex-shrink-0">

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/auth";
+import { getMidtransConfig } from "@/lib/payment/midtrans";
 
 type RouteParams = { params: Promise<{ id: string }> };
 
@@ -34,7 +35,12 @@ export async function GET(_req: Request, { params }: RouteParams) {
       return NextResponse.json({ error: "Pesanan tidak ditemukan." }, { status: 404 });
     }
 
-    return NextResponse.json({ order });
+    const cfg = getMidtransConfig();
+    return NextResponse.json({
+      order,
+      snapClientKey: cfg.clientKey,
+      snapScriptUrl: cfg.snapScriptUrl,
+    });
   } catch (error) {
     console.error("[GET /api/account/orders/[id]]", error);
     return NextResponse.json({ error: "Gagal mengambil detail pesanan." }, { status: 500 });
